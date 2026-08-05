@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2A6E3B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="我們的行事曆">
+<title>我們的行事曆</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;600;700&family=Noto+Sans+TC:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#FFF6E0;
+    --paper:#FFFEFA;
+    --ink:#3A2E1E;
+    --ink-soft:#7A6B4E;
+    --line:#F0E2BE;
+    --brand:#357A44;
+    --brand-soft:#E3F3E2;
+    --husband:#1F6FA0;
+    --husband-soft:#E1F0FA;
+    --wife:#9E421A;
+    --wife-soft:#F7DDC9;
+    --both:#865808;
+    --both-soft:#F5E4B8;
+    --danger:#C43F26;
+    --header-bg:#2A6E3B;
+    --radius:18px;
+    --radius-sm:12px;
+    --shadow:0 3px 12px rgba(58,46,30,0.10);
+    --shadow-lg:0 12px 28px rgba(58,46,30,0.20);
+    --gold:#865808;
+    --dot-color:rgba(58,46,30,0.05);
+    --input-bg:#FFFAEC;
+    --ghost-bg:#F3E7C6;
+    --muted-2:#E0CE9C;
+    --muted-3:#C7B481;
+  }
+  html[data-theme="dark"]{
+    --bg:#1A2018;
+    --paper:#242C20;
+    --ink:#F5EFDD;
+    --ink-soft:#B0A688;
+    --line:#3C4433;
+    --brand:#7FCB8E;
+    --brand-soft:#28361F;
+    --husband:#6FB8E8;
+    --husband-soft:#20323F;
+    --wife:#F0955F;
+    --wife-soft:#3D2C1E;
+    --both:#F0C158;
+    --both-soft:#3B3018;
+    --danger:#F0876A;
+    --gold:#F0C158;
+    --header-bg:#2E6B3F;
+    --shadow:0 6px 18px rgba(0,0,0,0.35);
+    --shadow-lg:0 14px 34px rgba(0,0,0,0.5);
+    --dot-color:rgba(255,255,255,0.045);
+    --input-bg:#282F22;
+    --ghost-bg:#333C2A;
+    --muted-2:#4C4A36;
+    --muted-3:#7A7358;
+  }
+  *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;}
+  html{transition:background-color .25s ease;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(circle, var(--dot-color) 1px, transparent 1px) 0 0/14px 14px,
+      var(--bg);
+    color:var(--ink);
+    font-family:'Noto Sans TC', sans-serif;
+    -webkit-font-smoothing:antialiased;
+    overscroll-behavior-y:none;
+    padding-bottom:env(safe-area-inset-bottom);
+    transition:background-color .25s ease, color .25s ease;
+  }
+  .app{
+    max-width:520px;
+    margin:0 auto;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+
+  /* ---------- Header ---------- */
+  header.top{
+    padding:calc(env(safe-area-inset-top) + 18px) 20px 16px;
+    background:var(--header-bg);
+    background:linear-gradient(160deg, #1F76A0 0%, var(--header-bg) 65%);
+    color:#fff;
+    position:relative;
+    overflow:hidden;
+    border-radius:0 0 24px 24px;
+  }
+  header.top::before{
+    content:"";
+    position:absolute;
+    top:-10px; right:-30px;
+    width:150px; height:60px;
+    background:rgba(255,255,255,0.10);
+    transform:rotate(-14deg);
+    border-radius:4px;
+  }
+  header.top::after{
+    content:"";
+    position:absolute;
+    bottom:-18px; left:-22px;
+    width:90px; height:38px;
+    background:rgba(255,255,255,0.07);
+    transform:rotate(8deg);
+    border-radius:4px;
+  }
+  .top-row{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    position:relative;
+    z-index:1;
+  }
+  .app-title{
+    font-family:'Noto Serif TC', serif;
+    font-weight:600;
+    font-size:15px;
+    letter-spacing:2px;
+    opacity:0.85;
+    margin:0 0 2px;
+  }
+  .icon-group{display:flex; gap:8px;}
+  .icon-btn{
+    width:36px; height:36px;
+    border-radius:50%;
+    border:1.5px solid rgba(255,255,255,0.6);
+    background:rgba(255,255,255,0.12);
+    color:#fff;
+    font-size:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .month-title{
+    font-family:'Noto Serif TC', serif;
+    font-weight:700;
+    font-size:28px;
+    margin:0;
+    letter-spacing:1px;
+    position:relative;
+    display:inline-block;
+    padding-bottom:8px;
+  }
+  .month-title::after{
+    content:"";
+    position:absolute;
+    left:1px; bottom:0;
+    width:26px; height:3px;
+    border-radius:3px;
+    background:var(--gold);
+  }
+  .month-nav{
+    display:flex;
+    align-items:center;
+    gap:6px;
+    position:relative;
+    z-index:1;
+    margin-top:6px;
+    flex-wrap:wrap;
+  }
+  .nav-btn{
+    width:32px; height:32px;
+    border-radius:50%;
+    border:none;
+    background:rgba(255,255,255,0.16);
+    color:#fff;
+    font-size:16px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    cursor:pointer;
+  }
+  .today-btn{
+    border:none;
+    background:rgba(255,255,255,0.16);
+    color:#fff;
+    font-size:13px;
+    padding:6px 12px;
+    border-radius:20px;
+    cursor:pointer;
+    font-family:'Noto Sans TC',sans-serif;
+    margin-left:4px;
+  }
+  .view-toggle{
+    margin-left:auto;
+    display:flex;
+    background:rgba(255,255,255,0.14);
+    border-radius:20px;
+    padding:2px;
+  }
+  .view-toggle button{
+    border:none;
+    background:transparent;
+    color:#fff;
+    font-size:12.5px;
+    padding:6px 12px;
+    border-radius:18px;
+    cursor:pointer;
+    font-family:inherit;
+    opacity:0.8;
+  }
+  .view-toggle button.active{
+    background:#fff;
+    color:var(--brand);
+    font-weight:700;
+    opacity:1;
+  }
+
+  /* ---------- Countdown banner ---------- */
+  .countdown-banner{
+    margin:14px 16px 0;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:16px;
+    padding:12px 14px;
+    box-shadow:var(--shadow);
+    display:flex;
+    align-items:center;
+    gap:10px;
+    font-size:13.5px;
+  }
+  .countdown-banner .cd-num{
+    font-family:'Noto Serif TC', serif;
+    font-weight:700;
+    font-size:20px;
+    color:var(--brand);
+    min-width:34px;
+    text-align:center;
+  }
+  .countdown-banner .cd-text b{font-weight:700;}
+  .countdown-banner .cd-text{color:var(--ink-soft);}
+
+  /* ---------- Category filter ---------- */
+  .cat-filter{
+    display:flex;
+    gap:8px;
+    padding:14px 16px 0;
+    overflow-x:auto;
+  }
+  .cat-chip{
+    flex:none;
+    font-size:12.5px;
+    padding:7px 13px;
+    border-radius:20px;
+    border:1.5px solid var(--line);
+    background:var(--paper);
+    color:var(--ink-soft);
+    cursor:pointer;
+    white-space:nowrap;
+  }
+  .cat-chip.active{
+    background:var(--header-bg);
+    border-color:var(--header-bg);
+    color:#fff;
+    font-weight:600;
+  }
+
+  /* ---------- Calendar grid ---------- */
+  .cal-wrap{
+    padding:14px 14px 8px;
+  }
+  .weekday-row{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    text-align:center;
+    font-size:11.5px;
+    letter-spacing:1px;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+  }
+  .weekday-row span{padding:4px 0;}
+  .week-row{
+    display:grid;
+    grid-template-columns:repeat(7,1fr);
+    gap:3px;
+    margin-bottom:3px;
+  }
+  .day-cell{
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:flex-start;
+    padding-top:6px;
+    height:58px;
+    border-radius:14px;
+    cursor:pointer;
+    color:var(--ink);
+    background:transparent;
+    transition:background .15s;
+    overflow:visible;
+  }
+  .day-cell.empty{cursor:default;}
+  .day-cell .num{font-size:14px; font-weight:500;}
+  .day-cell.other-month .num{color:var(--muted-2);}
+  .day-cell.today .num{
+    color:#fff;
+    background:var(--header-bg);
+    width:24px;height:24px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 3px 8px rgba(46,38,26,0.3);
+  }
+  .day-cell.selected{
+    background:var(--brand-soft);
+    box-shadow:inset 0 0 0 1.5px var(--brand);
+  }
+  .day-cell:active{background:rgba(58,51,44,0.05);}
+  .day-cell.holiday:not(.today) .num{color:var(--danger); font-weight:700;}
+  .day-cell.company-holiday:not(.today):not(.holiday) .num{color:var(--husband); font-weight:700; text-decoration:underline; text-decoration-style:dotted; text-decoration-thickness:1.5px; text-underline-offset:2px;}
+  .holiday-tag.company{color:var(--husband); background:var(--husband-soft);}
+  .holiday-tag{
+    display:inline-block;
+    font-size:11.5px;
+    font-weight:700;
+    color:var(--danger);
+    background:var(--both-soft);
+    background:color-mix(in srgb, var(--danger) 14%, transparent);
+    padding:2px 9px;
+    border-radius:20px;
+    margin-left:2px;
+  }
+  .trip-bar{
+    width:calc(100% + 4px);
+    height:7px;
+    margin:4px -2px 0;
+    border-radius:2px;
+    background:var(--both);
+    background:linear-gradient(180deg, var(--both), color-mix(in srgb, var(--both) 78%, black));
+  }
+  .trip-bar.husband{background:var(--husband); background:linear-gradient(180deg, var(--husband), color-mix(in srgb, var(--husband) 78%, black));}
+  .trip-bar.wife{background:var(--wife); background:linear-gradient(180deg, var(--wife), color-mix(in srgb, var(--wife) 78%, black));}
+  .trip-bar.both{background:var(--both); background:linear-gradient(180deg, var(--both), color-mix(in srgb, var(--both) 78%, black));}
+  .trip-bar.cap-l{border-top-left-radius:6px; border-bottom-left-radius:6px; margin-left:0;}
+  .trip-bar.cap-r{border-top-right-radius:6px; border-bottom-right-radius:6px; margin-right:0;}
+  .dots{
+    display:flex;
+    gap:3px;
+    margin-top:4px;
+    height:6px;
+  }
+  .dot{width:6px;height:6px;border-radius:50%;}
+  .dot.husband{background:var(--husband);}
+  .dot.wife{background:var(--wife);}
+  .dot.both{background:var(--both);}
+  .more-badge{font-size:9px; color:var(--ink-soft); margin-top:1px;}
+
+  /* ---------- Day list ---------- */
+  .day-list-section{
+    flex:1;
+    padding:18px 18px 110px;
+  }
+  .day-list-header{
+    display:flex;
+    align-items:baseline;
+    gap:8px;
+    margin-bottom:12px;
+  }
+  .day-list-header .d-date{
+    font-family:'Noto Serif TC', serif;
+    font-weight:700;
+    font-size:19px;
+  }
+  .day-list-header .d-week{
+    font-size:13px;
+    color:var(--ink-soft);
+  }
+  .empty-state{
+    text-align:center;
+    padding:36px 10px;
+    color:var(--ink-soft);
+    font-size:14px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius);
+    box-shadow:var(--shadow);
+  }
+  .empty-state .emoji{font-size:30px; display:block; margin-bottom:10px;}
+  .event-card{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius-sm);
+    padding:13px 14px;
+    margin-bottom:10px;
+    box-shadow:var(--shadow);
+    display:flex;
+    gap:11px;
+    align-items:flex-start;
+    cursor:pointer;
+    border-left:3px solid var(--husband);
+  }
+  .event-card.wife{border-left-color:var(--wife);}
+  .event-card.both{border-left-color:var(--both);}
+  .event-card.husband{border-left-color:var(--husband);}
+  .event-time{
+    font-size:12px;
+    color:var(--ink-soft);
+    min-width:44px;
+    padding-top:2px;
+    font-variant-numeric:tabular-nums;
+  }
+  .event-body{flex:1; min-width:0;}
+  .event-title{font-family:'Noto Serif TC', serif; font-size:15.5px; font-weight:600; margin:0 0 3px; word-break:break-word;}
+  .event-note{font-size:13px; color:var(--ink-soft); margin:0; word-break:break-word;}
+  .event-meta{display:flex; align-items:center; gap:6px; margin-top:6px; flex-wrap:wrap;}
+  .event-tag{
+    display:inline-block;
+    font-size:11px;
+    padding:2px 8px;
+    border-radius:20px;
+    font-weight:500;
+  }
+  .event-tag.husband{background:var(--husband-soft); color:var(--husband);}
+  .event-tag.wife{background:var(--wife-soft); color:var(--wife);}
+  .event-tag.both{background:var(--both-soft); color:var(--both);}
+  .event-cat{font-size:11px; color:var(--ink-soft);}
+  .edit-meta{font-size:11px; color:var(--muted-3); margin-top:8px;}
+  .week-day-header{
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--ink-soft);
+    margin:16px 0 8px;
+  }
+  .week-day-header:first-child{margin-top:0;}
+  .week-day-header.is-today{color:var(--brand);}
+
+  /* ---------- FAB ---------- */
+  .fab{
+    position:fixed;
+    right:calc(50% - 260px + 22px);
+    bottom:calc(env(safe-area-inset-bottom) + 22px);
+    width:58px;height:58px;
+    border-radius:50%;
+    background:var(--header-bg);
+    color:#fff;
+    border:none;
+    font-size:28px;
+    box-shadow:var(--shadow-lg);
+    display:flex;align-items:center;justify-content:center;
+    cursor:pointer;
+    z-index:20;
+  }
+  @media (max-width:560px){
+    .fab{ right:22px; }
+  }
+
+  /* ---------- Sheet / Modal ---------- */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(40,34,28,0.42);
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    z-index:50;
+  }
+  .overlay.center{align-items:center;}
+  .overlay.show{display:flex;}
+  .sheet{
+    background:var(--paper);
+    width:100%;
+    max-width:520px;
+    border-radius:24px 24px 0 0;
+    padding:20px 20px calc(env(safe-area-inset-bottom) + 22px);
+    max-height:88vh;
+    overflow-y:auto;
+    animation:slideUp .22s ease-out;
+  }
+  .overlay.center .sheet{
+    border-radius:22px;
+    max-width:340px;
+    padding:26px 22px;
+    animation:popIn .18s ease-out;
+  }
+  @keyframes slideUp{from{transform:translateY(30px); opacity:0;} to{transform:translateY(0); opacity:1;}}
+  @keyframes popIn{from{transform:scale(.94); opacity:0;} to{transform:scale(1); opacity:1;}}
+  .sheet-handle{
+    width:38px;height:4px;border-radius:4px;
+    background:var(--line);
+    margin:0 auto 16px;
+  }
+  .sheet h2{
+    font-family:'Noto Serif TC', serif;
+    font-size:19px;
+    margin:0 0 18px;
+  }
+  .field{margin-bottom:14px;}
+  .field label{
+    display:block;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-bottom:6px;
+    font-weight:500;
+  }
+  .field input[type=text], .field input[type=date], .field input[type=time], .field textarea{
+    width:100%;
+    border:1.5px solid var(--line);
+    background:var(--input-bg);
+    border-radius:12px;
+    padding:11px 12px;
+    font-size:15px;
+    font-family:inherit;
+    color:var(--ink);
+  }
+  .field textarea{resize:none; min-height:64px;}
+  .field input:focus, .field textarea:focus{outline:none; border-color:var(--brand);}
+  .row-2{display:flex; gap:10px;}
+  .row-2 .field{flex:1;}
+  .person-picker, .cat-picker{display:flex; gap:8px; flex-wrap:wrap;}
+  .person-opt{
+    flex:1;
+    text-align:center;
+    padding:10px 6px;
+    border-radius:12px;
+    border:1.5px solid var(--line);
+    font-size:13.5px;
+    font-weight:500;
+    cursor:pointer;
+    color:var(--ink-soft);
+    background:var(--input-bg);
+  }
+  .person-opt.active.husband{background:var(--husband-soft); border-color:var(--husband); color:var(--husband);}
+  .person-opt.active.wife{background:var(--wife-soft); border-color:var(--wife); color:var(--wife);}
+  .person-opt.active.both{background:var(--both-soft); border-color:var(--both); color:var(--both);}
+  .cat-opt{
+    flex:1;
+    min-width:70px;
+    text-align:center;
+    padding:9px 6px;
+    border-radius:12px;
+    border:1.5px solid var(--line);
+    font-size:12.5px;
+    font-weight:500;
+    cursor:pointer;
+    color:var(--ink-soft);
+    background:var(--input-bg);
+  }
+  .cat-opt.active{background:var(--brand-soft); border-color:var(--brand); color:var(--brand);}
+  .form-hint{font-size:11.5px; color:var(--ink-soft); margin:-8px 0 14px;}
+  .sheet-actions{
+    display:flex;
+    gap:10px;
+    margin-top:6px;
+  }
+  .btn{
+    flex:1;
+    border:none;
+    padding:13px;
+    border-radius:12px;
+    font-size:15px;
+    font-weight:600;
+    letter-spacing:0.5px;
+    cursor:pointer;
+    font-family:inherit;
+  }
+  .btn.primary{background:var(--header-bg); color:#fff;}
+  .btn.ghost{background:var(--ghost-bg); color:var(--ink);}
+  .btn.danger-text{background:none; color:var(--danger); font-weight:500; flex:none; padding:13px 4px;}
+
+  .identity-opts{display:flex; gap:10px; margin:18px 0 8px;}
+  .identity-card{
+    flex:1;
+    padding:20px 8px;
+    text-align:center;
+    border-radius:16px;
+    border:1.5px solid var(--line);
+    cursor:pointer;
+    font-size:14px;
+    font-weight:600;
+  }
+  .identity-card .emoji{font-size:26px; display:block; margin-bottom:8px;}
+  .identity-card.husband{color:var(--husband);}
+  .identity-card.wife{color:var(--wife);}
+  .skip-link{
+    text-align:center;
+    font-size:13px;
+    color:var(--ink-soft);
+    margin-top:10px;
+    cursor:pointer;
+    text-decoration:underline;
+  }
+
+  /* ---------- Search sheet ---------- */
+  .search-input-wrap{
+    position:relative;
+    margin-bottom:14px;
+  }
+  .search-input-wrap input{
+    width:100%;
+    border:1.5px solid var(--line);
+    background:var(--input-bg);
+    border-radius:12px;
+    padding:12px 14px;
+    font-size:15px;
+    font-family:inherit;
+  }
+  .search-input-wrap input:focus{outline:none; border-color:var(--brand);}
+  .search-results{min-height:40px;}
+  .search-result{
+    padding:11px 4px;
+    border-bottom:1px solid var(--line);
+    cursor:pointer;
+  }
+  .search-result:last-child{border-bottom:none;}
+  .search-result .sr-date{font-size:11.5px; color:var(--brand); font-weight:700;}
+  .search-result .sr-title{font-size:14.5px; font-weight:600; margin:2px 0;}
+  .search-result .sr-note{font-size:12.5px; color:var(--ink-soft);}
+  .search-empty{text-align:center; color:var(--ink-soft); font-size:13.5px; padding:30px 10px;}
+
+  .toast{
+    position:fixed;
+    left:50%; bottom:26px;
+    transform:translateX(-50%);
+    background:#2B2620;
+    color:#F5F1EA;
+    padding:10px 18px;
+    border-radius:30px;
+    font-size:13.5px;
+    z-index:80;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity .2s, transform .2s;
+    max-width:88%;
+    text-align:center;
+  }
+  .toast.show{opacity:1; transform:translateX(-50%) translateY(-6px);}
+
+  /* ---------- Theme transition ---------- */
+  .event-card, .sheet, .countdown-banner, .empty-state, .cat-chip, .day-cell, .person-opt, .cat-opt,
+  .field input, .field textarea, .search-input-wrap input{
+    transition:background-color .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease, transform .12s ease, opacity .12s ease;
+  }
+
+  /* ---------- Tactile press feedback ---------- */
+  .nav-btn, .today-btn, .icon-btn, .view-toggle button, .cat-chip, .person-opt, .cat-opt,
+  .event-card, .fab, .btn, .identity-card, .search-result{
+    transition:transform .12s ease, opacity .12s ease, background .15s ease, box-shadow .15s ease;
+  }
+  .nav-btn:active, .today-btn:active, .icon-btn:active{transform:scale(0.9);}
+  .fab:active{transform:scale(0.92);}
+  .event-card:active, .search-result:active{transform:scale(0.985); opacity:0.9;}
+  .cat-chip:active, .person-opt:active, .cat-opt:active, .identity-card:active, .btn:active{transform:scale(0.96);}
+
+  /* ---------- Scrollbar polish for sheets ---------- */
+  .sheet::-webkit-scrollbar{width:5px;}
+  .sheet::-webkit-scrollbar-thumb{background:var(--line); border-radius:10px;}
+  .cat-filter::-webkit-scrollbar{display:none;}
+
+  /* ---------- Empty state icon backdrop ---------- */
+  .empty-state .emoji{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    width:52px; height:52px;
+    border-radius:50%;
+    background:var(--brand-soft);
+    margin-bottom:12px;
+    font-size:24px;
+  }
+
+  @keyframes fadeIn{from{opacity:0; transform:translateY(4px);} to{opacity:1; transform:translateY(0);}}
+  #eventList, #monthEventList{animation:fadeIn .25s ease;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <header class="top">
+    <div class="top-row">
+      <p class="app-title">💍 我們的行事曆</p>
+      <div class="icon-group">
+        <div class="icon-btn" id="themeBtn">🌙</div>
+        <div class="icon-btn" id="searchBtn">🔍</div>
+        <div class="icon-btn" id="idBtn">👤</div>
+      </div>
+    </div>
+    <h1 class="month-title" id="monthTitle">8月</h1>
+    <div class="month-nav">
+      <button class="nav-btn" id="prevBtn">‹</button>
+      <button class="nav-btn" id="nextBtn">›</button>
+      <button class="today-btn" id="todayBtn">今天</button>
+      <div class="view-toggle" id="viewToggle">
+        <button data-v="month" class="active">月</button>
+        <button data-v="week">週</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="countdown-banner" id="countdownBanner" style="display:none;">
+    <div class="cd-num" id="cdNum">–</div>
+    <div class="cd-text" id="cdText"></div>
+  </div>
+
+  <div class="cat-filter" id="catFilter"></div>
+
+  <div class="cal-wrap">
+    <div class="weekday-row">
+      <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+    </div>
+    <div id="gridBody"></div>
+  </div>
+
+  <section class="day-list-section">
+    <div class="day-list-header">
+      <span class="d-date" id="selDate">—</span>
+      <span class="d-week" id="selWeek"></span>
+      <span class="holiday-tag" id="selHolidayTag" style="display:none;"></span>
+      <span class="holiday-tag company" id="selCompanyTag" style="display:none;"></span>
+    </div>
+    <div id="eventList"></div>
+
+    <h2 id="monthListTitle" style="font-family:'Noto Serif TC',serif; font-size:17px; margin:26px 0 12px;">本月行程</h2>
+    <div id="monthEventList"></div>
+  </section>
+
+  <button class="fab" id="fabBtn">＋</button>
+</div>
+
+<!-- Event form sheet -->
+<div class="overlay" id="formOverlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <h2 id="formTitle">新增行程</h2>
+    <div class="field">
+      <label>標題</label>
+      <input type="text" id="fTitle" placeholder="例如：一起吃晚餐">
+    </div>
+    <div class="row-2">
+      <div class="field">
+        <label>日期</label>
+        <input type="date" id="fDate">
+      </div>
+      <div class="field" id="timeFieldWrap">
+        <label>時間（選填）</label>
+        <input type="time" id="fTime">
+      </div>
+    </div>
+    <div class="field" id="endDateField">
+      <label id="endDateLabel">結束日期（選填，會建立連續多天行程）</label>
+      <input type="date" id="fEndDate">
+    </div>
+    <p class="form-hint" id="formHint">填結束日期會把同一筆行程展開到每一天，月曆上會顯示成一條連續色帶</p>
+    <div class="field">
+      <label>誰的行程</label>
+      <div class="person-picker" id="personPicker">
+        <div class="person-opt husband" data-p="husband">Kian</div>
+        <div class="person-opt wife" data-p="wife">Evelyn</div>
+        <div class="person-opt both" data-p="both">兩人</div>
+      </div>
+    </div>
+    <div class="field">
+      <label>分類</label>
+      <div class="cat-picker" id="catPicker"></div>
+    </div>
+    <div class="field">
+      <label>備註（選填）</label>
+      <textarea id="fNote" placeholder="想補充的細節⋯"></textarea>
+    </div>
+    <div class="field" id="repeatField">
+      <label style="display:flex; align-items:center; gap:8px; cursor:pointer;">
+        <input type="checkbox" id="fRepeat" style="width:17px; height:17px;">
+        每年重複（結婚紀念日、生日等）
+      </label>
+    </div>
+    <div id="editMeta" class="edit-meta" style="display:none;"></div>
+    <div class="sheet-actions">
+      <button class="btn danger-text" id="deleteBtn" style="display:none;">刪除</button>
+      <button class="btn ghost" id="cancelBtn">取消</button>
+      <button class="btn primary" id="saveBtn">儲存</button>
+    </div>
+  </div>
+</div>
+
+<!-- Identity picker -->
+<div class="overlay center" id="idOverlay">
+  <div class="sheet">
+    <h2 style="text-align:center;">你是哪一位呢？</h2>
+    <p style="text-align:center; font-size:13px; color:var(--ink-soft); margin:0;">選好之後，新增行程時會幫你預設好人員</p>
+    <div class="identity-opts">
+      <div class="identity-card husband" data-p="husband"><span class="emoji">🤵</span>Kian</div>
+      <div class="identity-card wife" data-p="wife"><span class="emoji">👰</span>Evelyn</div>
+    </div>
+    <div class="skip-link" id="idSkip">先不設定</div>
+  </div>
+</div>
+
+<!-- Search sheet -->
+<div class="overlay" id="searchOverlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <h2>搜尋行程</h2>
+    <div class="search-input-wrap">
+      <input type="text" id="searchInput" placeholder="輸入標題或備註關鍵字⋯">
+    </div>
+    <div class="search-results" id="searchResults">
+      <div class="search-empty">輸入關鍵字開始搜尋</div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+  const $ = (id) => document.getElementById(id);
+  const pad = n => String(n).padStart(2,'0');
+  const dateKey = d => `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  const weekNames = ['日','一','二','三','四','五','六'];
+  const personLabel = {husband:'Kian', wife:'Evelyn', both:'兩人'};
+  const CATS = [
+    {key:'travel', icon:'✈️', label:'旅遊'},
+    {key:'run', icon:'🏃', label:'路跑'},
+    {key:'show', icon:'🎭', label:'展演'},
+    {key:'medical', icon:'🩺', label:'醫療'},
+    {key:'date', icon:'🍽️', label:'約會'},
+    {key:'family', icon:'👨‍👩‍👧', label:'家人'},
+    {key:'home', icon:'🏠', label:'居家'},
+    {key:'anniversary', icon:'💍', label:'紀念日'},
+    {key:'life', icon:'📌', label:'雜項'}
+  ];
+  const catMap = Object.fromEntries(CATS.map(c=>[c.key,c]));
+
+  // ---------- 台灣國定假日(依行政院人事行政總處公告) ----------
+  // 農曆節日逐年異動，這裡先收錄目前行事曆涵蓋範圍(2026年/民國115年)的公告資料
+  const TW_HOLIDAYS = [
+    {date:'2026-01-01', name:'元旦'},
+    {date:'2026-02-15', name:'小年夜'},
+    {date:'2026-02-16', name:'除夕'},
+    {date:'2026-02-17', name:'春節初一'},
+    {date:'2026-02-18', name:'春節初二'},
+    {date:'2026-02-19', name:'春節初三'},
+    {date:'2026-02-20', name:'小年夜補假'},
+    {date:'2026-02-27', name:'和平紀念日補假'},
+    {date:'2026-02-28', name:'和平紀念日'},
+    {date:'2026-04-03', name:'兒童節補假'},
+    {date:'2026-04-04', name:'兒童節'},
+    {date:'2026-04-05', name:'清明節'},
+    {date:'2026-04-06', name:'清明節補假'},
+    {date:'2026-05-01', name:'勞動節'},
+    {date:'2026-06-19', name:'端午節'},
+    {date:'2026-09-25', name:'中秋節'},
+    {date:'2026-09-28', name:'教師節'},
+    {date:'2026-10-09', name:'國慶日補假'},
+    {date:'2026-10-10', name:'國慶日'},
+    {date:'2026-10-25', name:'台灣光復節'},
+    {date:'2026-10-26', name:'光復節補假'},
+    {date:'2026-12-25', name:'行憲紀念日'},
+    {date:'2027-01-01', name:'元旦'}
+  ];
+  const holidayMap = Object.fromEntries(TW_HOLIDAYS.map(h=>[h.date, h.name]));
+  function holidayName(dk){ return holidayMap[dk] || null; }
+
+  // ---------- 公司行事曆放假日(目前為 Kian 的公司,依「Qualcomm 2026 Calendar Taiwan」公告) ----------
+  const COMPANY_HOLIDAYS = [
+    {date:'2026-03-12', name:'Qcom Day', person:'husband'},
+    {date:'2026-03-20', name:'Qcom Day', person:'husband'},
+    {date:'2026-06-12', name:'Qcom Day', person:'husband'},
+    {date:'2026-09-04', name:'Qcom Day', person:'husband'},
+    {date:'2026-12-04', name:'Qcom Day', person:'husband'},
+    // 以下是台灣現行國定假日已經沒有、但公司仍保留放假的紀念日
+    {date:'2026-03-30', name:'青年節', person:'husband'},
+    {date:'2026-10-30', name:'蔣公誕辰紀念日', person:'husband'},
+    {date:'2026-11-12', name:'國父誕辰紀念日', person:'husband'}
+  ];
+  const companyHolidayMap = Object.fromEntries(COMPANY_HOLIDAYS.map(h=>[h.date, h]));
+  function companyHoliday(dk){ return companyHolidayMap[dk] || null; }
+
+  let today = new Date();
+  today.setHours(0,0,0,0);
+  let viewYear = today.getFullYear();
+  let viewMonth = today.getMonth();
+  let selected = new Date(today);
+  let viewMode = 'month';
+  let weekStart = getWeekStart(today);
+  let events = [];
+  let me = null;
+  let editingId = null;
+  let activeCats = new Set(CATS.map(c=>c.key));
+
+  function getWeekStart(d){
+    const nd = new Date(d);
+    nd.setHours(0,0,0,0);
+    nd.setDate(nd.getDate() - nd.getDay());
+    return nd;
+  }
+  function addDays(d, n){
+    const nd = new Date(d);
+    nd.setDate(nd.getDate()+n);
+    return nd;
+  }
+  function eventCategory(e){ return e.category || 'life'; }
+  function visibleEvents(){ return events.filter(e => activeCats.has(eventCategory(e))); }
+  function baseYearOf(e){ return parseInt(e.date.slice(0,4),10); }
+  function monthDayOf(e){ return e.date.slice(5); } // MM-DD
+  // 下一次會發生的日期字串(YYYY-MM-DD)。一般行程回傳原本日期；每年重複的行程回傳下一個尚未過的週年日
+  function nextOccurrenceKey(e){
+    if(e.repeat!=='yearly') return e.date;
+    const baseYear = baseYearOf(e);
+    const md = monthDayOf(e);
+    let y = today.getFullYear();
+    let candidate = `${y}-${md}`;
+    if(candidate < dateKey(today)) { y += 1; candidate = `${y}-${md}`; }
+    if(y < baseYear){ y = baseYear; candidate = `${baseYear}-${md}`; }
+    return candidate;
+  }
+
+  async function loadEvents(){
+    try{
+      const res = await window.storage.get('events', true);
+      events = res && res.value ? JSON.parse(res.value) : [];
+    }catch(e){ events = []; }
+  }
+  async function saveEvents(){
+    try{
+      await window.storage.set('events', JSON.stringify(events), true);
+    }catch(e){
+      showToast('儲存失敗，請稍後再試');
+    }
+  }
+  async function loadMe(){
+    try{
+      const res = await window.storage.get('me', false);
+      me = res && res.value ? res.value : null;
+    }catch(e){ me = null; }
+  }
+  async function saveMe(val){
+    me = val;
+    try{ await window.storage.set('me', val, false); }catch(e){}
+  }
+  async function recordActivity(action, title){
+    const payload = {by: me || '未知', at: new Date().toISOString(), title, action};
+    try{ await window.storage.set('lastActivity', JSON.stringify(payload), true); }catch(e){}
+  }
+  async function checkPartnerActivity(){
+    try{
+      const [actRes, seenRes] = await Promise.allSettled([
+        window.storage.get('lastActivity', true),
+        window.storage.get('lastSeenAt', false)
+      ]);
+      const act = actRes.status==='fulfilled' && actRes.value ? JSON.parse(actRes.value.value) : null;
+      const seenAt = seenRes.status==='fulfilled' && seenRes.value ? seenRes.value.value : null;
+      if(act && act.by && act.by !== (me||'未知') && (!seenAt || act.at > seenAt)){
+        const dt = new Date(act.at);
+        const label = personLabel[act.by] || act.by;
+        showToast(`${label} ${pad(dt.getMonth()+1)}/${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())} ${act.action}了「${act.title}」`, 3200);
+      }
+      try{ await window.storage.set('lastSeenAt', new Date().toISOString(), false); }catch(e){}
+    }catch(e){ /* no activity yet */ }
+  }
+
+  let toastTimer;
+  function showToast(msg, dur){
+    const t = $('toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(()=> t.classList.remove('show'), dur||1800);
+  }
+
+  function renderCatFilter(){
+    const wrap = $('catFilter');
+    wrap.innerHTML = '';
+    const allChip = document.createElement('div');
+    allChip.className = 'cat-chip' + (activeCats.size===CATS.length ? ' active':'');
+    allChip.textContent = '全部';
+    allChip.addEventListener('click', ()=>{
+      activeCats = new Set(CATS.map(c=>c.key));
+      renderCatFilter(); renderAll();
+    });
+    wrap.appendChild(allChip);
+    CATS.forEach(c=>{
+      const chip = document.createElement('div');
+      chip.className = 'cat-chip' + (activeCats.has(c.key) ? ' active':'');
+      chip.textContent = c.icon + ' ' + c.label;
+      chip.addEventListener('click', ()=>{
+        if(activeCats.has(c.key)) activeCats.delete(c.key); else activeCats.add(c.key);
+        if(activeCats.size===0) activeCats = new Set(CATS.map(x=>x.key));
+        renderCatFilter(); renderAll();
+      });
+      wrap.appendChild(chip);
+    });
+  }
+
+  function renderCountdown(){
+    const banner = $('countdownBanner');
+    const vis = visibleEvents();
+    const tripStartMap = {};
+    vis.forEach(e=>{
+      if(e.tripId){
+        if(!tripStartMap[e.tripId] || e.date < tripStartMap[e.tripId]) tripStartMap[e.tripId] = e.date;
+      }
+    });
+    const todayKey = dateKey(today);
+    const withNext = vis
+      .filter(e=> !(e.tripId && tripStartMap[e.tripId] !== e.date))
+      .map(e=> ({e, occ: nextOccurrenceKey(e)}))
+      .filter(x=> x.occ >= todayKey);
+    if(withNext.length===0){ banner.style.display='none'; return; }
+    withNext.sort((a,b)=> a.occ.localeCompare(b.occ));
+    const nearestDate = withNext[0].occ;
+    const bucket = withNext.filter(x=>x.occ===nearestDate).map(x=>x.e);
+    const diffDays = Math.round((new Date(nearestDate+'T00:00:00') - today) / 86400000);
+    const title = bucket[0].title + (bucket.length>1 ? ` 等 ${bucket.length} 筆` : '');
+    $('cdNum').textContent = diffDays===0 ? '今天' : diffDays;
+    $('cdText').innerHTML = diffDays===0
+      ? `<b>${escapeHtml(title)}</b> 就是今天`
+      : `還有 <b>${diffDays}</b> 天：${escapeHtml(title)}`;
+    banner.style.display = 'flex';
+  }
+
+  function renderMonthTitle(){
+    if(viewMode==='month'){
+      $('monthTitle').textContent = `${viewYear}年 ${viewMonth+1}月`;
+    } else {
+      const end = addDays(weekStart,6);
+      const sameMonth = weekStart.getMonth()===end.getMonth();
+      $('monthTitle').textContent = sameMonth
+        ? `${weekStart.getMonth()+1}/${weekStart.getDate()} - ${end.getDate()}`
+        : `${weekStart.getMonth()+1}/${weekStart.getDate()} - ${end.getMonth()+1}/${end.getDate()}`;
+    }
+  }
+
+  function buildMonthCells(){
+    const firstOfMonth = new Date(viewYear, viewMonth, 1);
+    const startOffset = firstOfMonth.getDay();
+    const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+    const daysInPrevMonth = new Date(viewYear, viewMonth, 0).getDate();
+    const cells = [];
+    for(let i=startOffset-1;i>=0;i--){
+      cells.push({date:new Date(viewYear, viewMonth-1, daysInPrevMonth-i), other:true});
+    }
+    for(let d=1; d<=daysInMonth; d++){
+      cells.push({date:new Date(viewYear, viewMonth, d), other:false});
+    }
+    let trail = 1;
+    while(cells.length % 7 !== 0){
+      cells.push({date:new Date(viewYear, viewMonth+1, trail++), other:true});
+    }
+    return cells;
+  }
+
+  function buildWeekCells(){
+    const cells = [];
+    for(let i=0;i<7;i++) cells.push({date:addDays(weekStart,i), other:false});
+    return cells;
+  }
+
+  function renderGrid(){
+    const body = $('gridBody');
+    body.innerHTML = '';
+    const cells = viewMode==='month' ? buildMonthCells() : buildWeekCells();
+    const vis = visibleEvents();
+    const byDate = {};
+    const pushToDate = (dk, e) => { (byDate[dk] = byDate[dk]||[]).push(e); };
+    const yearsInView = [...new Set(cells.map(c=>c.date.getFullYear()))];
+    vis.forEach(e=>{
+      pushToDate(e.date, e);
+      if(e.repeat==='yearly'){
+        const baseYear = baseYearOf(e);
+        const md = monthDayOf(e);
+        yearsInView.forEach(y=>{
+          const dk = `${y}-${md}`;
+          if(y>baseYear && dk!==e.date) pushToDate(dk, e);
+        });
+      }
+    });
+
+    for(let w=0; w<cells.length; w+=7){
+      const rowCells = cells.slice(w, w+7);
+      const rowDiv = document.createElement('div');
+      rowDiv.className = 'week-row';
+      rowCells.forEach(cell=>{
+        const key = dateKey(cell.date);
+        const isToday = key === dateKey(today);
+        const isSelected = key === dateKey(selected);
+        const div = document.createElement('div');
+        div.className = 'day-cell' + (cell.other?' other-month':'') + (isToday?' today':'') + (isSelected?' selected':'') + (holidayName(key)?' holiday':'') + (companyHoliday(key)?' company-holiday':'');
+        const num = document.createElement('div');
+        num.className = 'num';
+        num.textContent = cell.date.getDate();
+        div.appendChild(num);
+
+        const dayEvents = byDate[key] || [];
+        const tripEvent = dayEvents.find(e=>e.tripId);
+        if(tripEvent){
+          const bar = document.createElement('div');
+          const sameTripAll = vis.filter(e=>e.tripId===tripEvent.tripId);
+          const minDate = sameTripAll.reduce((m,e)=> e.date<m?e.date:m, sameTripAll[0].date);
+          const maxDate = sameTripAll.reduce((m,e)=> e.date>m?e.date:m, sameTripAll[0].date);
+          bar.className = 'trip-bar ' + tripEvent.person + (key===minDate?' cap-l':'') + (key===maxDate?' cap-r':'');
+          div.appendChild(bar);
+        }
+        const nonTrip = dayEvents.filter(e=>!e.tripId);
+        if(nonTrip.length){
+          const dotsWrap = document.createElement('div');
+          dotsWrap.className = 'dots';
+          nonTrip.slice(0,3).forEach(e=>{
+            const dot = document.createElement('div');
+            dot.className = 'dot ' + e.person;
+            dotsWrap.appendChild(dot);
+          });
+          div.appendChild(dotsWrap);
+          if(nonTrip.length>3){
+            const more = document.createElement('div');
+            more.className='more-badge';
+            more.textContent = '+'+(nonTrip.length-3);
+            div.appendChild(more);
+          }
+        }
+        div.addEventListener('click', ()=>{
+          selected = cell.date;
+          if(viewMode==='month' && cell.other){
+            viewYear = cell.date.getFullYear();
+            viewMonth = cell.date.getMonth();
+          }
+          if(viewMode==='week'){ weekStart = getWeekStart(cell.date); }
+          renderAll();
+        });
+        rowDiv.appendChild(div);
+      });
+      body.appendChild(rowDiv);
+    }
+  }
+
+  function getEventsForDate(dateObj){
+    const key = dateKey(dateObj);
+    const md = key.slice(5);
+    const y = dateObj.getFullYear();
+    return visibleEvents().filter(e=>{
+      if(e.date===key) return true;
+      if(e.repeat==='yearly') return monthDayOf(e)===md && y>baseYearOf(e);
+      return false;
+    }).sort((a,b)=> (a.time||'99:99').localeCompare(b.time||'99:99'));
+  }
+
+  function renderDayList(){
+    $('selDate').textContent = `${selected.getMonth()+1}月${selected.getDate()}日`;
+    $('selWeek').textContent = '星期' + weekNames[selected.getDay()];
+    const hName = holidayName(dateKey(selected));
+    const tagEl = $('selHolidayTag');
+    if(hName){ tagEl.style.display='inline-block'; tagEl.textContent = '🎌 ' + hName; }
+    else { tagEl.style.display = 'none'; }
+    const cHoliday = companyHoliday(dateKey(selected));
+    const cTagEl = $('selCompanyTag');
+    if(cHoliday){ cTagEl.style.display='inline-block'; cTagEl.textContent = `🏢 ${cHoliday.name}（${personLabel[cHoliday.person]}放假）`; }
+    else { cTagEl.style.display = 'none'; }
+    const list = getEventsForDate(selected);
+    const wrap = $('eventList');
+    wrap.innerHTML = '';
+    if(list.length===0){
+      wrap.innerHTML = `<div class="empty-state"><span class="emoji">🗓️</span>這天還沒有安排<br>點右下角「＋」新增一筆吧</div>`;
+      return;
+    }
+    list.forEach(e=> wrap.appendChild(buildEventCard(e)));
+  }
+
+  function renderMonthList(){
+    const titleEl = $('monthListTitle');
+    const wrap = $('monthEventList');
+    let rangeDates = [];
+    if(viewMode==='month'){
+      titleEl.textContent = `${viewMonth+1}月的行程`;
+      const daysInMonth = new Date(viewYear, viewMonth+1, 0).getDate();
+      for(let d=1; d<=daysInMonth; d++) rangeDates.push(new Date(viewYear, viewMonth, d));
+    } else {
+      titleEl.textContent = '本週的行程';
+      for(let i=0;i<7;i++) rangeDates.push(addDays(weekStart,i));
+    }
+    wrap.innerHTML = '';
+    let any = false;
+    rangeDates.forEach(d=>{
+      const list = getEventsForDate(d);
+      if(list.length===0) return;
+      any = true;
+      const key = dateKey(d);
+      const isToday = key===dateKey(today);
+      const hName = holidayName(key);
+      const cHoliday = companyHoliday(key);
+      const header = document.createElement('div');
+      header.className = 'week-day-header' + (isToday?' is-today':'');
+      header.innerHTML = `${d.getMonth()+1}/${d.getDate()}（${weekNames[d.getDay()]}）${isToday?'・今天':''}${hName?` <span class="holiday-tag">🎌 ${hName}</span>`:''}${cHoliday?` <span class="holiday-tag company">🏢 ${cHoliday.name}</span>`:''}`;
+      wrap.appendChild(header);
+      list.forEach(e=> wrap.appendChild(buildEventCard(e)));
+    });
+    if(!any){
+      wrap.innerHTML = `<div class="empty-state"><span class="emoji">📭</span>這段期間還沒有安排任何行程</div>`;
+    }
+  }
+
+  function buildEventCard(e){
+    const card = document.createElement('div');
+    card.className = 'event-card ' + e.person;
+    const cat = catMap[eventCategory(e)];
+    let durationBadge = '';
+    if(e.tripId){
+      const range = tripRange(e.tripId);
+      const nights = Math.max(range.count-1, 0);
+      durationBadge = `<span class="event-cat">🧳 共${range.count}天${nights}夜</span>`;
+    }
+    card.innerHTML = `
+      <div class="event-time">${e.time || ''}</div>
+      <div class="event-body">
+        <p class="event-title">${escapeHtml(e.title)}</p>
+        ${e.note ? `<p class="event-note">${escapeHtml(e.note)}</p>` : ''}
+        <div class="event-meta">
+          <span class="event-tag ${e.person}">${personLabel[e.person]}</span>
+          <span class="event-cat">${cat.icon} ${cat.label}</span>
+          ${durationBadge}
+        </div>
+      </div>
+    `;
+    card.addEventListener('click', ()=> openForm(e));
+    return card;
+  }
+
+  function escapeHtml(str){
+    const d = document.createElement('div');
+    d.textContent = str;
+    return d.innerHTML;
+  }
+
+  function renderAll(){
+    renderMonthTitle();
+    renderGrid();
+    renderDayList();
+    renderMonthList();
+    renderCountdown();
+  }
+
+  $('prevBtn').addEventListener('click', ()=>{
+    if(viewMode==='month'){
+      viewMonth--; if(viewMonth<0){viewMonth=11; viewYear--;}
+    } else {
+      weekStart = addDays(weekStart,-7);
+    }
+    renderAll();
+  });
+  $('nextBtn').addEventListener('click', ()=>{
+    if(viewMode==='month'){
+      viewMonth++; if(viewMonth>11){viewMonth=0; viewYear++;}
+    } else {
+      weekStart = addDays(weekStart,7);
+    }
+    renderAll();
+  });
+  $('todayBtn').addEventListener('click', ()=>{
+    viewYear = today.getFullYear();
+    viewMonth = today.getMonth();
+    weekStart = getWeekStart(today);
+    selected = new Date(today);
+    renderAll();
+  });
+  $('viewToggle').addEventListener('click', (e)=>{
+    const btn = e.target.closest('button');
+    if(!btn) return;
+    viewMode = btn.dataset.v;
+    document.querySelectorAll('#viewToggle button').forEach(b=> b.classList.toggle('active', b===btn));
+    if(viewMode==='week') weekStart = getWeekStart(selected);
+    else { viewYear = selected.getFullYear(); viewMonth = selected.getMonth(); }
+    renderAll();
+  });
+
+  let currentCat = 'life';
+  function renderCatPicker(){
+    const wrap = $('catPicker');
+    wrap.innerHTML = '';
+    CATS.forEach(c=>{
+      const opt = document.createElement('div');
+      opt.className = 'cat-opt' + (currentCat===c.key?' active':'');
+      opt.textContent = c.icon + ' ' + c.label;
+      opt.dataset.c = c.key;
+      opt.addEventListener('click', ()=>{ currentCat = c.key; renderCatPicker(); });
+      wrap.appendChild(opt);
+    });
+  }
+
+  const formOverlay = $('formOverlay');
+  let editingTripId = null;
+
+  function tripRange(tripId){
+    const days = events.filter(e=>e.tripId===tripId).map(e=>e.date).sort();
+    return {start: days[0], end: days[days.length-1], count: days.length};
+  }
+
+  function openForm(evt){
+    editingTripId = evt && evt.tripId ? evt.tripId : null;
+    editingId = evt && !editingTripId ? evt.id : null;
+    const isTrip = !!editingTripId;
+
+    $('formTitle').textContent = isTrip ? '編輯整趟旅遊' : (evt ? '編輯行程' : '新增行程');
+    $('fTitle').value = evt ? evt.title : '';
+
+    if(isTrip){
+      const range = tripRange(editingTripId);
+      $('fDate').value = range.start;
+      $('fEndDate').value = range.end;
+      $('endDateField').style.display = 'block';
+      $('endDateLabel').textContent = '結束日期';
+      $('formHint').textContent = `這是連續 ${range.count} 天 ${Math.max(range.count-1,0)} 夜的旅遊，調整起訖日期會重新排列每一天`;
+      $('formHint').style.display = 'block';
+      $('timeFieldWrap').style.display = 'none';
+      $('repeatField').style.display = 'none';
+      $('fTime').value = '';
+      $('fRepeat').checked = false;
+    } else {
+      $('fDate').value = evt ? evt.date : dateKey(selected);
+      $('fTime').value = evt ? (evt.time||'') : '';
+      $('fEndDate').value = '';
+      $('endDateField').style.display = evt ? 'none' : 'block';
+      $('endDateLabel').textContent = '結束日期（選填，會建立連續多天行程）';
+      $('formHint').textContent = '填結束日期會把同一筆行程展開到每一天，月曆上會顯示成一條連續色帶';
+      $('formHint').style.display = evt ? 'none' : 'block';
+      $('timeFieldWrap').style.display = 'block';
+      $('repeatField').style.display = 'block';
+      $('fRepeat').checked = !!(evt && evt.repeat==='yearly');
+    }
+
+    $('fNote').value = evt ? (evt.note||'') : '';
+    setPerson(evt ? evt.person : (me || 'both'));
+    currentCat = evt ? eventCategory(evt) : 'life';
+    renderCatPicker();
+    $('deleteBtn').style.display = evt ? 'block' : 'none';
+    $('deleteBtn').textContent = isTrip ? '刪除整趟旅遊' : '刪除';
+
+    const metaEl = $('editMeta');
+    let metaText = '';
+    if(evt && evt.editedBy){
+      const dt = evt.editedAt ? new Date(evt.editedAt) : null;
+      metaText += `上次編輯：${personLabel[evt.editedBy]||evt.editedBy}${dt?`・${pad(dt.getMonth()+1)}/${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`:''}`;
+    }
+    if(evt && evt.repeat==='yearly'){
+      metaText += (metaText?'　':'') + '此行程每年重複，編輯／刪除會套用到所有年份';
+    }
+    if(isTrip){
+      metaText += (metaText?'　':'') + '此為連續多天旅遊，編輯／刪除會套用到整趟行程';
+    }
+    if(metaText){ metaEl.style.display='block'; metaEl.textContent = metaText; }
+    else { metaEl.style.display = 'none'; }
+    formOverlay.classList.add('show');
+    setTimeout(()=> $('fTitle').focus(), 250);
+  }
+  function closeForm(){ formOverlay.classList.remove('show'); }
+  $('cancelBtn').addEventListener('click', closeForm);
+  formOverlay.addEventListener('click', (e)=>{ if(e.target===formOverlay) closeForm(); });
+
+  let currentPerson = 'both';
+  function setPerson(p){
+    currentPerson = p;
+    document.querySelectorAll('.person-opt').forEach(el=> el.classList.toggle('active', el.dataset.p===p));
+  }
+  $('personPicker').addEventListener('click', (e)=>{
+    const opt = e.target.closest('.person-opt');
+    if(opt) setPerson(opt.dataset.p);
+  });
+
+  $('fDate').addEventListener('change', updateDurationHint);
+  $('fEndDate').addEventListener('change', updateDurationHint);
+  function updateDurationHint(){
+    const date = $('fDate').value;
+    const endDate = $('fEndDate').value;
+    if(editingTripId){
+      if(date && endDate){
+        const days = expandDateRange(date, endDate).length;
+        $('formHint').textContent = `這是連續 ${days} 天 ${Math.max(days-1,0)} 夜的旅遊，調整起訖日期會重新排列每一天`;
+      }
+      return;
+    }
+    if(date && endDate && endDate>date){
+      const days = expandDateRange(date, endDate).length;
+      $('formHint').textContent = `將建立共 ${days} 天 ${days-1} 夜的連續行程，月曆上會顯示成一條連續色帶`;
+    } else {
+      $('formHint').textContent = '填結束日期會把同一筆行程展開到每一天，月曆上會顯示成一條連續色帶';
+    }
+  }
+
+  $('saveBtn').addEventListener('click', async ()=>{
+    const title = $('fTitle').value.trim();
+    const date = $('fDate').value;
+    const endDate = $('fEndDate').value;
+    if(!title){ showToast('請輸入標題'); return; }
+    if(!date){ showToast('請選擇日期'); return; }
+    if(endDate && endDate < date){ showToast('結束日期不能早於開始日期'); return; }
+    const nowIso = new Date().toISOString();
+    const editedBy = me || '未知';
+    const note = $('fNote').value.trim();
+
+    if(editingTripId){
+      // 整趟旅遊:先移除舊的每一天,再依新的起訖日期重新展開
+      events = events.filter(e=>e.tripId!==editingTripId);
+      let d = new Date(date+'T00:00:00');
+      const end = new Date((endDate||date)+'T00:00:00');
+      while(d<=end){
+        events.push({
+          id: 'ev-'+Date.now()+'-'+Math.random().toString(36).slice(2,7)+'-'+dateKey(d),
+          title, date: dateKey(d), time:'',
+          note, person: currentPerson, category: currentCat,
+          tripId: editingTripId, editedBy, editedAt: nowIso
+        });
+        d.setDate(d.getDate()+1);
+      }
+    } else if(!editingId && endDate && endDate > date){
+      const tripId = 'trip-'+Date.now()+'-'+Math.random().toString(36).slice(2,6);
+      let d = new Date(date+'T00:00:00');
+      const end = new Date(endDate+'T00:00:00');
+      while(d<=end){
+        events.push({
+          id: 'ev-'+Date.now()+'-'+Math.random().toString(36).slice(2,7),
+          title, date: dateKey(d), time: (dateKey(d)===date? $('fTime').value:'') || '',
+          note, person: currentPerson, category: currentCat,
+          tripId, editedBy, editedAt: nowIso
+        });
+        d.setDate(d.getDate()+1);
+      }
+    } else {
+      const payload = {
+        id: editingId || ('ev-'+Date.now()+'-'+Math.random().toString(36).slice(2,7)),
+        title, date,
+        time: $('fTime').value || '',
+        note,
+        person: currentPerson,
+        category: currentCat,
+        repeat: $('fRepeat').checked ? 'yearly' : 'none',
+        editedBy, editedAt: nowIso
+      };
+      if(editingId){
+        const idx = events.findIndex(e=>e.id===editingId);
+        if(idx>-1) payload.tripId = events[idx].tripId;
+        if(idx>-1) events[idx] = payload; else events.push(payload);
+      } else {
+        events.push(payload);
+      }
+    }
+    await saveEvents();
+    await recordActivity((editingId||editingTripId)?'修改':'新增', title);
+    closeForm();
+    selected = new Date(date+'T00:00:00');
+    viewYear = selected.getFullYear();
+    viewMonth = selected.getMonth();
+    if(viewMode==='week') weekStart = getWeekStart(selected);
+    renderAll();
+    showToast('已儲存');
+  });
+
+  $('deleteBtn').addEventListener('click', async ()=>{
+    if(editingTripId){
+      const target = events.find(e=>e.tripId===editingTripId);
+      events = events.filter(e=>e.tripId!==editingTripId);
+      await saveEvents();
+      if(target) await recordActivity('刪除', target.title);
+      closeForm();
+      renderAll();
+      showToast('已刪除整趟旅遊');
+      return;
+    }
+    if(!editingId) return;
+    const target = events.find(e=>e.id===editingId);
+    events = events.filter(e=>e.id!==editingId);
+    await saveEvents();
+    if(target) await recordActivity('刪除', target.title);
+    closeForm();
+    renderAll();
+    showToast('已刪除');
+  });
+
+  $('fabBtn').addEventListener('click', ()=> openForm(null));
+
+  const idOverlay = $('idOverlay');
+  $('idBtn').addEventListener('click', ()=> idOverlay.classList.add('show'));
+  $('idSkip').addEventListener('click', ()=> idOverlay.classList.remove('show'));
+  idOverlay.addEventListener('click', (e)=>{ if(e.target===idOverlay) idOverlay.classList.remove('show'); });
+  document.querySelectorAll('.identity-card').forEach(card=>{
+    card.addEventListener('click', async ()=>{
+      await saveMe(card.dataset.p);
+      idOverlay.classList.remove('show');
+      showToast(card.dataset.p==='husband' ? '你好，Kian 🤵' : '你好，Evelyn 👰');
+    });
+  });
+
+  const searchOverlay = $('searchOverlay');
+  $('searchBtn').addEventListener('click', ()=>{
+    searchOverlay.classList.add('show');
+    setTimeout(()=> $('searchInput').focus(), 250);
+  });
+  searchOverlay.addEventListener('click', (e)=>{ if(e.target===searchOverlay) searchOverlay.classList.remove('show'); });
+  $('searchInput').addEventListener('input', (e)=>{
+    const q = e.target.value.trim();
+    const wrap = $('searchResults');
+    if(!q){ wrap.innerHTML = '<div class="search-empty">輸入關鍵字開始搜尋</div>'; return; }
+    const rawMatches = events.filter(ev => ev.title.includes(q) || (ev.note && ev.note.includes(q)));
+    // 多天旅遊會有好幾筆(每天一筆)符合關鍵字,這裡合併成一筆結果,避免同一趟旅遊重複列出
+    const seenTrip = new Set();
+    const matches = [];
+    rawMatches.sort((a,b)=> a.date.localeCompare(b.date)).forEach(ev=>{
+      if(ev.tripId){
+        if(seenTrip.has(ev.tripId)) return;
+        seenTrip.add(ev.tripId);
+      }
+      matches.push(ev);
+    });
+    if(matches.length===0){ wrap.innerHTML = '<div class="search-empty">找不到符合的行程</div>'; return; }
+    wrap.innerHTML = '';
+    matches.slice(0,50).forEach(ev=>{
+      const item = document.createElement('div');
+      item.className = 'search-result';
+      const showKey = ev.repeat==='yearly' ? nextOccurrenceKey(ev) : ev.date;
+      const d = new Date(showKey+'T00:00:00');
+      let dateLabel = `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}（${weekNames[d.getDay()]}）`;
+      if(ev.repeat==='yearly') dateLabel += '・每年重複';
+      if(ev.tripId){
+        const range = tripRange(ev.tripId);
+        const endD = new Date(range.end+'T00:00:00');
+        dateLabel += `～${endD.getMonth()+1}/${endD.getDate()}・共${range.count}天${Math.max(range.count-1,0)}夜`;
+      }
+      item.innerHTML = `<div class="sr-date">${dateLabel}</div>
+        <div class="sr-title">${escapeHtml(ev.title)}</div>
+        ${ev.note ? `<div class="sr-note">${escapeHtml(ev.note)}</div>` : ''}`;
+      item.addEventListener('click', ()=>{
+        searchOverlay.classList.remove('show');
+        selected = new Date(showKey+'T00:00:00');
+        viewYear = selected.getFullYear(); viewMonth = selected.getMonth();
+        weekStart = getWeekStart(selected);
+        viewMode = 'month';
+        document.querySelectorAll('#viewToggle button').forEach(b=> b.classList.toggle('active', b.dataset.v==='month'));
+        renderAll();
+      });
+      wrap.appendChild(item);
+    });
+  });
+
+  function expandDateRange(startStr, endStr){
+    const out = [];
+    let d = new Date(startStr+'T00:00:00');
+    const end = new Date(endStr+'T00:00:00');
+    while(d<=end){ out.push(dateKey(d)); d.setDate(d.getDate()+1); }
+    return out;
+  }
+  const seedSingles = [
+    {idBase:'checkup-2026', title:'健康檢查', date:'2026-08-11', time:'08:30', category:'medical'},
+    {idBase:'shishi-yejifest-2026', title:'十鼓藝術季-2026魔法夜祭2 神之島', date:'2026-08-22', time:'19:30', note:'十鼓文創園區 夢糖劇場・共2張', category:'show'},
+    {idBase:'xinwu-marathon-2026', title:'新屋魚米之鄉馬拉松 21k', date:'2026-10-04', category:'run'},
+    {idBase:'kobe-marathon-2026', title:'神戶馬拉松 42k', date:'2026-11-15', category:'run'},
+    {idBase:'hsinchu-marathon-2026', title:'新竹城市馬拉松 21k', date:'2026-12-06', category:'run'},
+    {idBase:'spirited-away-stage-2026', title:'《神隱少女》舞台劇', date:'2026-12-19', time:'14:30', note:'國家戲劇院・共2張', category:'show'}
+  ];
+  const seedRecurring = [
+    {idBase:'anniversary-together-2022', title:'交往紀念日', date:'2022-04-10', category:'anniversary', person:'both'},
+    {idBase:'anniversary-wedding-2024', title:'結婚紀念日', date:'2024-10-20', category:'anniversary', person:'both'},
+    {idBase:'anniversary-registered-2024', title:'登記紀念日', date:'2024-12-05', category:'anniversary', person:'both'},
+    {idBase:'birthday-kian-1985', title:'Kian 生日', date:'1985-12-08', category:'anniversary', person:'husband'},
+    {idBase:'birthday-evelyn-1984', title:'Evelyn 生日', date:'1984-12-30', category:'anniversary', person:'wife'}
+  ];
+  const seedTrips = [
+    {idBase:'tainan-trip-2026', title:'台南', start:'2026-08-22', end:'2026-08-24', note:'住宿:捷絲旅台南虎山館', category:'travel'},
+    {idBase:'panasonic-run-2026-trip', title:'Panasonic Taipei City Run 12.5k', start:'2026-09-05', end:'2026-09-06', note:'住宿:臺北車站智選假日酒店・9/6 清晨起跑,9/5 晚上先入住', category:'run'},
+    {idBase:'baigo-yaxing-2026-trip', title:'百GO夜行', start:'2026-09-11', end:'2026-09-12', note:'Gogoro年度電動機車夜騎派對・桃園陽光劇場,快閃太空城主題,告五人/范逸臣演出・住宿:COZZI Blu 和逸飯店‧桃園館', category:'show'},
+    {idBase:'garmin-run-2026-trip', title:'Garmin run 10k', start:'2026-11-28', end:'2026-11-29', note:'住宿:維多麗亞酒店', category:'run'},
+    {idBase:'hakodate-fukuoka-2026', title:'星宇函館去 福岡回', start:'2026-10-24', end:'2026-11-02', category:'travel'},
+    {idBase:'kobe-osaka-trip-2026', title:'星宇神戶去 大阪回', start:'2026-11-12', end:'2026-11-16', category:'travel'},
+    {idBase:'osaka-roundtrip-2027', title:'星宇大阪來回', start:'2027-02-25', end:'2027-03-02', category:'travel'}
+  ];
+  async function seedIfNeeded(){
+    let changed = false;
+    // 一次性遷移:幾筆路跑原本是單日行程,因為賽事在清晨、前一晚就要入住,
+    // 這裡先清掉舊版單日種子資料,避免跟新版兩天一夜重複顯示
+    ['seed-panasonic-run-2026','seed-baigo-yaxing-2026','seed-garmin-run-2026'].forEach(oldId=>{
+      if(events.some(e=>e.id===oldId)){
+        events = events.filter(e=>e.id!==oldId);
+        changed = true;
+      }
+    });
+    // 一次性修正:百GO夜行其實是 Gogoro 的電動機車夜騎派對,不是路跑,
+    // 如果先前已經用「路跑」分類存過,這裡順便更正分類跟備註
+    events.forEach(e=>{
+      if(e.tripId==='seed-baigo-yaxing-2026-trip' && e.category!=='show'){
+        e.category = 'show';
+        e.note = 'Gogoro年度電動機車夜騎派對・桃園陽光劇場,快閃太空城主題,告五人/范逸臣演出・住宿:COZZI Blu 和逸飯店‧桃園館';
+        changed = true;
+      }
+    });
+    seedSingles.forEach(s=>{
+      const id = 'seed-'+s.idBase;
+      if(!events.some(e=>e.id===id)){
+        events.push({id, title:s.title, date:s.date, time:s.time||'', note:s.note||'', person:'both', category:s.category||'life'});
+        changed = true;
+      }
+    });
+    seedRecurring.forEach(s=>{
+      const id = 'seed-'+s.idBase;
+      if(!events.some(e=>e.id===id)){
+        events.push({id, title:s.title, date:s.date, time:'', note:s.note||'', person:s.person||'both', category:s.category||'anniversary', repeat:'yearly'});
+        changed = true;
+      }
+    });
+    seedTrips.forEach(t=>{
+      const tripId = 'seed-'+t.idBase;
+      // 用 tripId 而非個別日期 id 判斷是否已存在,這樣使用者用「編輯整趟旅遊」
+      // 調整過起訖日期之後(id 會變成新的),就不會被種子資料誤判成缺漏而重新加回舊日期
+      const alreadyExists = events.some(e=>e.tripId===tripId);
+      if(!alreadyExists){
+        expandDateRange(t.start, t.end).forEach(dk=>{
+          events.push({id:tripId+'-'+dk, title:t.title, date:dk, time:'', note:t.note||'', person:'both', category:t.category||'travel', tripId});
+        });
+        changed = true;
+      }
+    });
+    if(changed) await saveEvents();
+  }
+
+  // ---------- Theme (深色模式) ----------
+  async function loadTheme(){
+    try{
+      const res = await window.storage.get('theme', false);
+      return res && res.value ? res.value : null;
+    }catch(e){ return null; }
+  }
+  async function saveTheme(val){
+    try{ await window.storage.set('theme', val, false); }catch(e){}
+  }
+  function applyTheme(theme){
+    document.documentElement.setAttribute('data-theme', theme);
+    $('themeBtn').textContent = theme==='dark' ? '☀️' : '🌙';
+  }
+  $('themeBtn').addEventListener('click', async ()=>{
+    const cur = document.documentElement.getAttribute('data-theme')==='dark' ? 'dark' : 'light';
+    const next = cur==='dark' ? 'light' : 'dark';
+    applyTheme(next);
+    await saveTheme(next);
+  });
+
+  async function init(){
+    renderCatFilter();
+    const [savedTheme] = await Promise.all([loadTheme(), loadEvents(), loadMe()]);
+    applyTheme(savedTheme || 'light');
+    await seedIfNeeded();
+    renderAll();
+    if(!me){
+      setTimeout(()=> idOverlay.classList.add('show'), 500);
+    } else {
+      checkPartnerActivity();
+    }
+  }
+  init();
+})();
+</script>
+</body>
+</html>
