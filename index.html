@@ -811,7 +811,22 @@
 
 <div class="toast" id="toast"></div>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-app.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/12.17.0/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyA3gN1BU9KJDz8FoYO4GkD3aq1Q9cHgiVk",
+  authDomain: "kian-evelyn-calendar.firebaseapp.com",
+  projectId: "kian-evelyn-calendar",
+  storageBucket: "kian-evelyn-calendar.firebasestorage.app",
+  messagingSenderId: "125839776893",
+  appId: "1:125839776893:web:c625a2f540b950764b6514"
+};
+const fbApp = initializeApp(firebaseConfig);
+const db = getFirestore(fbApp);
+const sharedDocRef = doc(db, 'calendar', 'shared');
+
 (function(){
   const $ = (id) => document.getElementById(id);
   const pad = n => String(n).padStart(2,'0');
@@ -917,46 +932,50 @@
 
   async function loadEvents(){
     try{
-      const res = await window.storage.get('events', true);
-      events = res && res.value ? JSON.parse(res.value) : [];
-    }catch(e){ events = []; }
+      const snap = await getDoc(sharedDocRef);
+      events = (snap.exists() && Array.isArray(snap.data().events)) ? snap.data().events : [];
+    }catch(e){ events = []; showToast('無法連線到雲端資料庫,請檢查網路'); }
   }
   async function saveEvents(){
     try{
-      await window.storage.set('events', JSON.stringify(events), true);
+      await setDoc(sharedDocRef, { events }, { merge:true });
     }catch(e){
-      showToast('儲存失敗，請稍後再試');
+      showToast('儲存失敗，請確認網路連線');
     }
   }
-  async function loadMe(){
-    try{
-      const res = await window.storage.get('me', false);
-      me = res && res.value ? res.value : null;
-    }catch(e){ me = null; }
+  function loadMe(){
+    try{ me = localStorage.getItem('cal_me') || null; }catch(e){ me = null; }
   }
-  async function saveMe(val){
+  function saveMe(val){
     me = val;
-    try{ await window.storage.set('me', val, false); }catch(e){}
+    try{ localStorage.setItem('cal_me', val); }catch(e){}
   }
   async function recordActivity(action, title){
     const payload = {by: me || '未知', at: new Date().toISOString(), title, action};
-    try{ await window.storage.set('lastActivity', JSON.stringify(payload), true); }catch(e){}
+    try{ await setDoc(sharedDocRef, { lastActivity: payload }, { merge:true }); }catch(e){}
   }
-  async function checkPartnerActivity(){
-    try{
-      const [actRes, seenRes] = await Promise.allSettled([
-        window.storage.get('lastActivity', true),
-        window.storage.get('lastSeenAt', false)
-      ]);
-      const act = actRes.status==='fulfilled' && actRes.value ? JSON.parse(actRes.value.value) : null;
-      const seenAt = seenRes.status==='fulfilled' && seenRes.value ? seenRes.value.value : null;
-      if(act && act.by && act.by !== (me||'未知') && (!seenAt || act.at > seenAt)){
-        const dt = new Date(act.at);
-        const label = personLabel[act.by] || act.by;
-        showToast(`${label} ${pad(dt.getMonth()+1)}/${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())} ${act.action}了「${act.title}」`, 3200);
-      }
-      try{ await window.storage.set('lastSeenAt', new Date().toISOString(), false); }catch(e){}
-    }catch(e){ /* no activity yet */ }
+  let lastShownActivityAt = null;
+  function handleIncomingActivity(act){
+    if(!act || !act.by || act.by === (me||'未知')) return;
+    if(act.at === lastShownActivityAt) return;
+    lastShownActivityAt = act.at;
+    const dt = new Date(act.at);
+    const label = personLabel[act.by] || act.by;
+    showToast(`${label} ${pad(dt.getMonth()+1)}/${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())} ${act.action}了「${act.title}」`, 3200);
+  }
+  let realtimeStarted = false;
+  function startRealtimeSync(){
+    if(realtimeStarted) return;
+    realtimeStarted = true;
+    onSnapshot(sharedDocRef, (snap)=>{
+      if(!snap.exists()) return;
+      const data = snap.data();
+      events = Array.isArray(data.events) ? data.events : [];
+      renderAll();
+      handleIncomingActivity(data.lastActivity);
+    }, (err)=>{
+      showToast('即時同步中斷,請重新整理頁面');
+    });
   }
 
   let toastTimer;
@@ -1481,7 +1500,7 @@
   idOverlay.addEventListener('click', (e)=>{ if(e.target===idOverlay) idOverlay.classList.remove('show'); });
   document.querySelectorAll('.identity-card').forEach(card=>{
     card.addEventListener('click', async ()=>{
-      await saveMe(card.dataset.p);
+      saveMe(card.dataset.p);
       idOverlay.classList.remove('show');
       showToast(card.dataset.p==='husband' ? '你好，Kian 🤵' : '你好，Evelyn 👰');
     });
@@ -1563,7 +1582,7 @@
   const seedTrips = [
     {idBase:'tainan-trip-2026', title:'台南', start:'2026-08-22', end:'2026-08-24', note:'住宿:捷絲旅台南虎山館', category:'travel'},
     {idBase:'panasonic-run-2026-trip', title:'Panasonic Taipei City Run 12.5k', start:'2026-09-05', end:'2026-09-06', note:'住宿:臺北車站智選假日酒店・9/6 清晨起跑,9/5 晚上先入住', category:'run'},
-    {idBase:'baigo-yaxing-2026-trip', title:'百GO夜行', start:'2026-09-11', end:'2026-09-12', note:'Gogoro年度電動機車夜騎派對・桃園陽光劇場,快閃太空城主題,告五人/范逸臣演出・住宿:COZZI Blu 和逸飯店‧桃園館', category:'show'},
+    {idBase:'baigo-yaxing-2026-trip2', title:'百GO夜行', start:'2026-09-12', end:'2026-09-13', note:'Gogoro年度電動機車夜騎派對・桃園陽光劇場,快閃太空城主題,告五人/范逸臣演出・活動下午開始到很晚,住宿:COZZI Blu 和逸飯店‧桃園館(週六當天入住,週日退房)', category:'show'},
     {idBase:'garmin-run-2026-trip', title:'Garmin run 10k', start:'2026-11-28', end:'2026-11-29', note:'住宿:維多麗亞酒店', category:'run'},
     {idBase:'hakodate-fukuoka-2026', title:'星宇函館去 福岡回', start:'2026-10-24', end:'2026-11-02', category:'travel'},
     {idBase:'kobe-osaka-trip-2026', title:'星宇神戶去 大阪回', start:'2026-11-12', end:'2026-11-16', category:'travel'},
@@ -1579,12 +1598,11 @@
         changed = true;
       }
     });
-    // 一次性修正:百GO夜行其實是 Gogoro 的電動機車夜騎派對,不是路跑,
-    // 如果先前已經用「路跑」分類存過,這裡順便更正分類跟備註
-    events.forEach(e=>{
-      if(e.tripId==='seed-baigo-yaxing-2026-trip' && e.category!=='show'){
-        e.category = 'show';
-        e.note = 'Gogoro年度電動機車夜騎派對・桃園陽光劇場,快閃太空城主題,告五人/范逸臣演出・住宿:COZZI Blu 和逸飯店‧桃園館';
+    // 一次性修正:百GO夜行下午開始、活動到很晚、隔天才退房,
+    // 這裡移除舊版(不論是單日還是日期算錯的兩天一夜版本),讓新版 9/12-9/13 重新加入
+    ['seed-baigo-yaxing-2026-trip'].forEach(oldTripId=>{
+      if(events.some(e=>e.tripId===oldTripId)){
+        events = events.filter(e=>e.tripId!==oldTripId);
         changed = true;
       }
     });
@@ -1618,37 +1636,34 @@
   }
 
   // ---------- Theme (深色模式) ----------
-  async function loadTheme(){
-    try{
-      const res = await window.storage.get('theme', false);
-      return res && res.value ? res.value : null;
-    }catch(e){ return null; }
+  function loadTheme(){
+    try{ return localStorage.getItem('cal_theme'); }catch(e){ return null; }
   }
-  async function saveTheme(val){
-    try{ await window.storage.set('theme', val, false); }catch(e){}
+  function saveTheme(val){
+    try{ localStorage.setItem('cal_theme', val); }catch(e){}
   }
   function applyTheme(theme){
     document.documentElement.setAttribute('data-theme', theme);
     $('themeBtn').textContent = theme==='dark' ? '☀️' : '🌙';
   }
-  $('themeBtn').addEventListener('click', async ()=>{
+  $('themeBtn').addEventListener('click', ()=>{
     const cur = document.documentElement.getAttribute('data-theme')==='dark' ? 'dark' : 'light';
     const next = cur==='dark' ? 'light' : 'dark';
     applyTheme(next);
-    await saveTheme(next);
+    saveTheme(next);
   });
 
   async function init(){
     renderCatFilter();
-    const [savedTheme] = await Promise.all([loadTheme(), loadEvents(), loadMe()]);
-    applyTheme(savedTheme || 'light');
+    applyTheme(loadTheme() || 'light');
+    loadMe();
+    await loadEvents();
     await seedIfNeeded();
     renderAll();
     if(!me){
       setTimeout(()=> idOverlay.classList.add('show'), 500);
-    } else {
-      checkPartnerActivity();
     }
+    startRealtimeSync();
   }
   init();
 })();
