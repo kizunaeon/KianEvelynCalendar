@@ -207,8 +207,8 @@
     min-width:16px; height:16px;
     padding:0 3px;
     border-radius:9px;
-    background:var(--gold);
-    color:#3A2E1E;
+    background:var(--header-bg);
+    color:#fff;
     font-size:10px;
     font-weight:700;
     display:flex; align-items:center; justify-content:center;
@@ -779,7 +779,7 @@
     font-size:12px;
     color:#fff;
   }
-  .todo-check.done{background:var(--brand); border-color:var(--brand);}
+  .todo-check.done{background:var(--header-bg); border-color:var(--header-bg);}
   .todo-text{flex:1; font-size:14.5px; word-break:break-word;}
   .todo-text.done{text-decoration:line-through; color:var(--ink-soft); opacity:0.7;}
   .todo-del{color:var(--danger); font-size:12px; cursor:pointer; padding:4px 6px; flex:none;}
@@ -1215,6 +1215,20 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
     return occs.length ? occs[0] : null;
   }
 
+  // Firestore 不允許欄位值是 undefined，寫入前一律過濾一次，
+  // 避免未來程式改動不小心又夾帶 undefined 導致整筆存檔失敗
+  function stripUndefined(val){
+    if(Array.isArray(val)) return val.map(stripUndefined);
+    if(val && typeof val==='object'){
+      const out = {};
+      Object.keys(val).forEach(k=>{
+        if(val[k]!==undefined) out[k] = stripUndefined(val[k]);
+      });
+      return out;
+    }
+    return val;
+  }
+
   function cacheLocalSnapshot(){
     try{ localStorage.setItem('cal_cache', JSON.stringify({events, cycleData, todos, cachedAt:new Date().toISOString()})); }catch(e){}
   }
@@ -1248,26 +1262,29 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
   }
   async function saveEvents(){
     try{
-      await setDoc(sharedDocRef, { events }, { merge:true });
+      await setDoc(sharedDocRef, { events: stripUndefined(events) }, { merge:true });
       cacheLocalSnapshot();
     }catch(e){
-      showToast('儲存失敗，請確認網路連線');
+      console.error('saveEvents failed:', e);
+      showToast('儲存失敗，請確認網路連線後再試一次');
     }
   }
   async function saveCycleData(){
     try{
-      await setDoc(sharedDocRef, { cycleData }, { merge:true });
+      await setDoc(sharedDocRef, { cycleData: stripUndefined(cycleData) }, { merge:true });
       cacheLocalSnapshot();
     }catch(e){
-      showToast('儲存失敗，請確認網路連線');
+      console.error('saveCycleData failed:', e);
+      showToast('儲存失敗，請確認網路連線後再試一次');
     }
   }
   async function saveTodos(){
     try{
-      await setDoc(sharedDocRef, { todos }, { merge:true });
+      await setDoc(sharedDocRef, { todos: stripUndefined(todos) }, { merge:true });
       cacheLocalSnapshot();
     }catch(e){
-      showToast('儲存失敗，請確認網路連線');
+      console.error('saveTodos failed:', e);
+      showToast('儲存失敗，請確認網路連線後再試一次');
     }
   }
   function loadMe(){
@@ -1279,7 +1296,7 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
   }
   async function recordActivity(action, title){
     const payload = {by: me || '未知', at: new Date().toISOString(), title, action};
-    try{ await setDoc(sharedDocRef, { lastActivity: payload }, { merge:true }); }catch(e){}
+    try{ await setDoc(sharedDocRef, { lastActivity: stripUndefined(payload) }, { merge:true }); }catch(e){}
   }
   let lastShownActivityAt = null;
   function handleIncomingActivity(act){
@@ -1824,7 +1841,8 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
   }
   function closeForm(){ formOverlay.classList.remove('show'); }
   $('cancelBtn').addEventListener('click', closeForm);
-  formOverlay.addEventListener('click', (e)=>{ if(e.target===formOverlay) closeForm(); });
+  // 刻意不加「點背景關閉」：這個表單常常在填寫中，點到背景容易誤觸導致還沒儲存的內容整個消失，
+  // 只能透過「取消」或「儲存」按鈕離開，確保使用者是有意識地放棄或送出這筆修改
 
   let currentPerson = 'both';
   function setPerson(p){
@@ -1927,7 +1945,6 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
       };
       if(editingId){
         const idx = events.findIndex(e=>e.id===editingId);
-        if(idx>-1) payload.tripId = events[idx].tripId;
         // 單年度專屬備註：保留原本的 yearNotes，只更新目前正在編輯的那一年
         if(idx>-1 && payload.repeat==='yearly'){
           const existingYearNotes = Object.assign({}, events[idx].yearNotes||{});
