@@ -40,6 +40,8 @@
     --ghost-bg:#F3E7C6;
     --muted-2:#E0CE9C;
     --muted-3:#C7B481;
+    --period:#A8447A;
+    --period-soft:#F6E3EF;
   }
   html[data-theme="dark"]{
     --bg:#1A2018;
@@ -65,6 +67,8 @@
     --ghost-bg:#333C2A;
     --muted-2:#4C4A36;
     --muted-3:#7A7358;
+    --period:#E7A0CB;
+    --period-soft:#3A2432;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
   html,body{height:100%;}
@@ -133,14 +137,14 @@
     opacity:0.85;
     margin:0 0 2px;
   }
-  .icon-group{display:flex; gap:8px;}
+  .icon-group{display:flex; gap:6px;}
   .icon-btn{
-    width:36px; height:36px;
+    width:33px; height:33px;
     border-radius:50%;
     border:1.5px solid rgba(255,255,255,0.6);
     background:rgba(255,255,255,0.12);
     color:#fff;
-    font-size:15px;
+    font-size:14px;
     display:flex;
     align-items:center;
     justify-content:center;
@@ -186,6 +190,7 @@
     cursor:pointer;
   }
   .today-btn{
+    position:relative;
     border:none;
     background:rgba(255,255,255,0.16);
     color:#fff;
@@ -195,6 +200,19 @@
     cursor:pointer;
     font-family:'Noto Sans TC',sans-serif;
     margin-left:4px;
+  }
+  .today-badge{
+    position:absolute;
+    top:-6px; right:-6px;
+    min-width:16px; height:16px;
+    padding:0 3px;
+    border-radius:9px;
+    background:var(--gold);
+    color:#3A2E1E;
+    font-size:10px;
+    font-weight:700;
+    display:flex; align-items:center; justify-content:center;
+    line-height:1;
   }
   .view-toggle{
     margin-left:auto;
@@ -297,7 +315,7 @@
     align-items:center;
     justify-content:flex-start;
     padding-top:6px;
-    height:58px;
+    height:64px;
     border-radius:14px;
     cursor:pointer;
     color:var(--ink);
@@ -348,6 +366,14 @@
   .trip-bar.both{background:var(--both); background:linear-gradient(180deg, var(--both), color-mix(in srgb, var(--both) 78%, black));}
   .trip-bar.cap-l{border-top-left-radius:6px; border-bottom-left-radius:6px; margin-left:0;}
   .trip-bar.cap-r{border-top-right-radius:6px; border-bottom-right-radius:6px; margin-right:0;}
+  .period-band{
+    width:calc(100% - 12px);
+    height:5px;
+    margin:3px auto 0;
+    border-radius:3px;
+    background:var(--period);
+    opacity:0.55;
+  }
   .dots{
     display:flex;
     gap:3px;
@@ -621,6 +647,151 @@
   .search-result .sr-note{font-size:12.5px; color:var(--ink-soft);}
   .search-empty{text-align:center; color:var(--ink-soft); font-size:13.5px; padding:30px 10px;}
 
+  /* ---------- Yearly stats ---------- */
+  .stats-year-nav{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:16px;
+    margin-bottom:16px;
+  }
+  .stats-year-nav button{
+    width:32px; height:32px;
+    border-radius:50%;
+    border:1.5px solid var(--line);
+    background:var(--paper);
+    color:var(--ink);
+    font-size:16px;
+    cursor:pointer;
+  }
+  .stats-year-nav h2{margin:0; font-size:18px;}
+  .stats-row{
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius-sm);
+    margin-bottom:8px;
+    overflow:hidden;
+  }
+  .stats-row-head{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:13px 15px;
+    cursor:pointer;
+    font-size:14.5px;
+    font-weight:600;
+  }
+  .stats-count{
+    font-family:'Noto Serif TC', serif;
+    font-weight:700;
+    color:var(--brand);
+    font-size:15px;
+  }
+  .stats-detail{
+    padding:0 15px 12px;
+    border-top:1px solid var(--line);
+  }
+  .stats-item{
+    font-size:13px;
+    color:var(--ink-soft);
+    padding:7px 0;
+    border-bottom:1px dashed var(--line);
+  }
+  .stats-item:last-child{border-bottom:none;}
+
+  /* ---------- Cycle tracking ---------- */
+  .cycle-summary{
+    background:var(--period-soft);
+    color:var(--period);
+    border-radius:12px;
+    padding:12px 14px;
+    font-size:13.5px;
+    font-weight:600;
+    line-height:1.6;
+  }
+  .cycle-log-item{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:10px 4px;
+    border-bottom:1px solid var(--line);
+    font-size:14px;
+  }
+  .cycle-log-item:last-child{border-bottom:none;}
+  .cycle-log-del{
+    color:var(--danger);
+    font-size:12.5px;
+    cursor:pointer;
+    padding:4px 8px;
+  }
+
+  /* ---------- Todo list ---------- */
+  .todo-header{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin:30px 0 12px;
+  }
+  .todo-count{font-size:12.5px; color:var(--ink-soft);}
+  .todo-add-row{
+    display:flex;
+    gap:8px;
+    margin-bottom:12px;
+  }
+  .todo-add-row input{
+    flex:1;
+    border:1.5px solid var(--line);
+    background:var(--input-bg);
+    border-radius:12px;
+    padding:11px 12px;
+    font-size:14.5px;
+    font-family:inherit;
+    color:var(--ink);
+  }
+  .todo-add-row input:focus{outline:none; border-color:var(--brand);}
+  .todo-add-row button{
+    border:none;
+    background:var(--header-bg);
+    color:#fff;
+    border-radius:12px;
+    padding:0 18px;
+    font-size:14px;
+    font-weight:600;
+    cursor:pointer;
+  }
+  .todo-item{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius-sm);
+    padding:11px 13px;
+    margin-bottom:8px;
+  }
+  .todo-check{
+    width:20px; height:20px;
+    border-radius:50%;
+    border:2px solid var(--line);
+    flex:none;
+    cursor:pointer;
+    display:flex; align-items:center; justify-content:center;
+    font-size:12px;
+    color:#fff;
+  }
+  .todo-check.done{background:var(--brand); border-color:var(--brand);}
+  .todo-text{flex:1; font-size:14.5px; word-break:break-word;}
+  .todo-text.done{text-decoration:line-through; color:var(--ink-soft); opacity:0.7;}
+  .todo-del{color:var(--danger); font-size:12px; cursor:pointer; padding:4px 6px; flex:none;}
+  .todo-clear-done{
+    text-align:center;
+    font-size:12.5px;
+    color:var(--ink-soft);
+    text-decoration:underline;
+    cursor:pointer;
+    padding:10px 0 4px;
+  }
+
   .toast{
     position:fixed;
     left:50%; bottom:26px;
@@ -683,6 +854,8 @@
     <div class="top-row">
       <p class="app-title">💍 我們的行事曆</p>
       <div class="icon-group">
+        <div class="icon-btn" id="cycleBtn">🌷</div>
+        <div class="icon-btn" id="statsBtn">📊</div>
         <div class="icon-btn" id="themeBtn">🌙</div>
         <div class="icon-btn" id="searchBtn">🔍</div>
         <div class="icon-btn" id="idBtn">👤</div>
@@ -692,7 +865,7 @@
     <div class="month-nav">
       <button class="nav-btn" id="prevBtn">‹</button>
       <button class="nav-btn" id="nextBtn">›</button>
-      <button class="today-btn" id="todayBtn">今天</button>
+      <button class="today-btn" id="todayBtn">今天<span class="today-badge" id="todayBadge" style="display:none;"></span></button>
       <div class="view-toggle" id="viewToggle">
         <button data-v="month" class="active">月</button>
         <button data-v="week">週</button>
@@ -725,6 +898,16 @@
 
     <h2 id="monthListTitle" style="font-family:'Noto Serif TC',serif; font-size:17px; margin:26px 0 12px;">本月行程</h2>
     <div id="monthEventList"></div>
+
+    <div class="todo-header">
+      <h2 style="font-family:'Noto Serif TC',serif; font-size:17px; margin:0;">📝 待辦清單</h2>
+      <span class="todo-count" id="todoCount"></span>
+    </div>
+    <div class="todo-add-row">
+      <input type="text" id="todoInput" placeholder="新增一件不用挑日期的事⋯">
+      <button id="todoAddBtn">新增</button>
+    </div>
+    <div id="todoList"></div>
   </section>
 
   <button class="fab" id="fabBtn">＋</button>
@@ -754,6 +937,7 @@
       <input type="date" id="fEndDate">
     </div>
     <p class="form-hint" id="formHint">填結束日期會把同一筆行程展開到每一天，月曆上會顯示成一條連續色帶</p>
+    <p class="form-hint" id="periodOverlapHint" style="display:none; color:var(--period);"></p>
     <div class="field">
       <label>誰的行程</label>
       <div class="person-picker" id="personPicker">
@@ -776,6 +960,10 @@
         每年重複（結婚紀念日、生日等）
       </label>
     </div>
+    <div class="field" id="yearNoteField" style="display:none;">
+      <label id="yearNoteLabel">本年度專屬備註</label>
+      <textarea id="fYearNote" placeholder="只會顯示在這一年，不影響其他年份的備註"></textarea>
+    </div>
     <div id="editMeta" class="edit-meta" style="display:none;"></div>
     <div class="sheet-actions">
       <button class="btn danger-text" id="deleteBtn" style="display:none;">刪除</button>
@@ -795,6 +983,8 @@
       <div class="identity-card wife" data-p="wife"><span class="emoji">👰</span>Evelyn</div>
     </div>
     <div class="skip-link" id="idSkip">先不設定</div>
+    <button class="btn ghost" id="notifyBtn" style="width:100%; margin-top:14px;">🔔 開啟明日行程提醒</button>
+    <p class="form-hint" style="text-align:center; margin:8px 0 0;">需要瀏覽器允許通知權限，且此頁面要有開啟過才會提醒</p>
   </div>
 </div>
 
@@ -809,6 +999,54 @@
     <div class="search-results" id="searchResults">
       <div class="search-empty">輸入關鍵字開始搜尋</div>
     </div>
+  </div>
+</div>
+
+<div class="overlay" id="cycleOverlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <h2>🌷 經期記錄</h2>
+    <p class="form-hint" style="margin-top:-8px;">記錄開始日期，累積 2 次以上會自動改用實際平均週期估算</p>
+
+    <div class="field">
+      <label>目前預估</label>
+      <div id="cycleSummary" class="cycle-summary">尚無足夠資料</div>
+    </div>
+
+    <div class="field">
+      <label>還沒有足夠紀錄時，先用這個天數估（選填）</label>
+      <input type="number" id="cycleManualLen" min="15" max="60" placeholder="例如 28">
+    </div>
+
+    <div class="row-2">
+      <div class="field">
+        <label>新增一筆開始日期</label>
+        <input type="date" id="cycleNewDate">
+      </div>
+    </div>
+    <button class="btn primary" id="cycleAddBtn" style="margin-bottom:16px;">新增紀錄</button>
+
+    <div class="field">
+      <label>歷史紀錄</label>
+      <div id="cycleLogList"></div>
+    </div>
+
+    <div class="sheet-actions">
+      <button class="btn ghost" id="cycleCloseBtn">關閉</button>
+    </div>
+  </div>
+</div>
+
+<div class="overlay" id="statsOverlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="stats-year-nav">
+      <button id="statsPrevYear">‹</button>
+      <h2 id="statsYearTitle">2026年 分類統計</h2>
+      <button id="statsNextYear">›</button>
+    </div>
+    <div id="statsList"></div>
+    <button class="btn ghost" id="exportBtn" style="width:100%; margin-top:18px;">💾 匯出備份（JSON）</button>
   </div>
 </div>
 
@@ -845,6 +1083,7 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
     {key:'family', icon:'👨‍👩‍👧', label:'家人'},
     {key:'home', icon:'🏠', label:'居家'},
     {key:'anniversary', icon:'💍', label:'紀念日'},
+    {key:'period', icon:'🌷', label:'經期'},
     {key:'life', icon:'📌', label:'雜項'}
   ];
   const catMap = Object.fromEntries(CATS.map(c=>[c.key,c]));
@@ -905,6 +1144,8 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
   let me = null;
   let editingId = null;
   let activeCats = new Set(CATS.map(c=>c.key));
+  let cycleData = {manualCycleLength:null, logs:[]};
+  let todos = [];
 
   function getWeekStart(d){
     const nd = new Date(d);
@@ -933,15 +1174,98 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
     return candidate;
   }
 
+  const PERIOD_LENGTH = 5;
+  function computeAvgCycle(){
+    const logs = [...cycleData.logs].sort();
+    if(logs.length>=2){
+      const diffs = [];
+      for(let i=1;i<logs.length;i++){
+        const d1 = new Date(logs[i-1]+'T00:00:00');
+        const d2 = new Date(logs[i]+'T00:00:00');
+        diffs.push(Math.round((d2-d1)/86400000));
+      }
+      const recent = diffs.slice(-6);
+      return Math.round(recent.reduce((a,b)=>a+b,0)/recent.length);
+    }
+    if(logs.length===1 && cycleData.manualCycleLength) return cycleData.manualCycleLength;
+    return null;
+  }
+  // 傳回落在 [rangeStart, rangeEnd] 區間內的預估經期範圍(含實際紀錄的那一次)
+  function getCycleOccurrences(rangeStart, rangeEnd){
+    const logs = [...cycleData.logs].sort();
+    if(logs.length===0) return [];
+    const avgCycle = computeAvgCycle();
+    if(!avgCycle) return [];
+    const anchor = new Date(logs[logs.length-1]+'T00:00:00');
+    const rStart = new Date(rangeStart+'T00:00:00');
+    const rEnd = new Date(rangeEnd+'T00:00:00');
+    const minK = Math.floor((rStart - anchor)/86400000/avgCycle) - 1;
+    const maxK = Math.ceil((rEnd - anchor)/86400000/avgCycle) + 1;
+    const results = [];
+    for(let k=minK; k<=maxK; k++){
+      const occStart = new Date(anchor); occStart.setDate(occStart.getDate() + k*avgCycle);
+      const occEnd = new Date(occStart); occEnd.setDate(occEnd.getDate() + PERIOD_LENGTH - 1);
+      if(occEnd < rStart || occStart > rEnd) continue;
+      results.push({start: dateKey(occStart), end: dateKey(occEnd)});
+    }
+    return results;
+  }
+  function cycleOccurrenceAt(dateStr){
+    const occs = getCycleOccurrences(dateStr, dateStr);
+    return occs.length ? occs[0] : null;
+  }
+
+  function cacheLocalSnapshot(){
+    try{ localStorage.setItem('cal_cache', JSON.stringify({events, cycleData, todos, cachedAt:new Date().toISOString()})); }catch(e){}
+  }
+  function loadLocalSnapshot(){
+    try{
+      const raw = localStorage.getItem('cal_cache');
+      if(!raw) return false;
+      const cached = JSON.parse(raw);
+      events = Array.isArray(cached.events) ? cached.events : [];
+      cycleData = cached.cycleData && typeof cached.cycleData==='object'
+        ? {manualCycleLength: cached.cycleData.manualCycleLength||null, logs: Array.isArray(cached.cycleData.logs)?cached.cycleData.logs:[]}
+        : {manualCycleLength:null, logs:[]};
+      todos = Array.isArray(cached.todos) ? cached.todos : [];
+      return true;
+    }catch(e){ return false; }
+  }
   async function loadEvents(){
     try{
       const snap = await getDoc(sharedDocRef);
-      events = (snap.exists() && Array.isArray(snap.data().events)) ? snap.data().events : [];
-    }catch(e){ events = []; showToast('無法連線到雲端資料庫,請檢查網路'); }
+      const data = snap.exists() ? snap.data() : {};
+      events = Array.isArray(data.events) ? data.events : [];
+      cycleData = data.cycleData && typeof data.cycleData==='object'
+        ? {manualCycleLength: data.cycleData.manualCycleLength||null, logs: Array.isArray(data.cycleData.logs)?data.cycleData.logs:[]}
+        : {manualCycleLength:null, logs:[]};
+      todos = Array.isArray(data.todos) ? data.todos : [];
+      cacheLocalSnapshot();
+    }catch(e){
+      const hasCache = loadLocalSnapshot();
+      showToast(hasCache ? '目前離線,顯示上次同步的資料' : '無法連線到雲端資料庫,請檢查網路', 3000);
+    }
   }
   async function saveEvents(){
     try{
       await setDoc(sharedDocRef, { events }, { merge:true });
+      cacheLocalSnapshot();
+    }catch(e){
+      showToast('儲存失敗，請確認網路連線');
+    }
+  }
+  async function saveCycleData(){
+    try{
+      await setDoc(sharedDocRef, { cycleData }, { merge:true });
+      cacheLocalSnapshot();
+    }catch(e){
+      showToast('儲存失敗，請確認網路連線');
+    }
+  }
+  async function saveTodos(){
+    try{
+      await setDoc(sharedDocRef, { todos }, { merge:true });
+      cacheLocalSnapshot();
     }catch(e){
       showToast('儲存失敗，請確認網路連線');
     }
@@ -974,10 +1298,15 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
       if(!snap.exists()) return;
       const data = snap.data();
       events = Array.isArray(data.events) ? data.events : [];
+      cycleData = data.cycleData && typeof data.cycleData==='object'
+        ? {manualCycleLength: data.cycleData.manualCycleLength||null, logs: Array.isArray(data.cycleData.logs)?data.cycleData.logs:[]}
+        : {manualCycleLength:null, logs:[]};
+      todos = Array.isArray(data.todos) ? data.todos : [];
+      cacheLocalSnapshot();
       renderAll();
       handleIncomingActivity(data.lastActivity);
     }, (err)=>{
-      showToast('即時同步中斷,請重新整理頁面');
+      showToast('即時同步中斷，離線時仍會顯示上次同步的資料', 3000);
     });
   }
 
@@ -1124,6 +1453,14 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
           div.appendChild(bar);
         }
         const nonTrip = dayEvents.filter(e=>!e.tripId);
+        if(activeCats.has('period')){
+          const cycleOcc = cycleOccurrenceAt(key);
+          if(cycleOcc){
+            const band = document.createElement('div');
+            band.className = 'period-band';
+            div.appendChild(band);
+          }
+        }
         if(nonTrip.length){
           const dotsWrap = document.createElement('div');
           dotsWrap.className = 'dots';
@@ -1159,11 +1496,29 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
     const key = dateKey(dateObj);
     const md = key.slice(5);
     const y = dateObj.getFullYear();
-    return visibleEvents().filter(e=>{
+    const list = visibleEvents().filter(e=>{
       if(e.date===key) return true;
       if(e.repeat==='yearly') return monthDayOf(e)===md && y>baseYearOf(e);
       return false;
-    }).sort((a,b)=> (a.time||'99:99').localeCompare(b.time||'99:99'));
+    }).map(e=>{
+      if(e.repeat!=='yearly') return e;
+      const yearNote = e.yearNotes && e.yearNotes[y];
+      return Object.assign({}, e, {occurrenceYear: y, note: yearNote || e.note});
+    });
+    if(activeCats.has('period')){
+      const occ = cycleOccurrenceAt(key);
+      if(occ){
+        const startD = new Date(occ.start+'T00:00:00');
+        const endD = new Date(occ.end+'T00:00:00');
+        list.push({
+          id:'period-'+occ.start, date:key, time:'', person:'wife', category:'period',
+          title:'經期（預估）',
+          note:`預估區間 ${startD.getMonth()+1}/${startD.getDate()} ～ ${endD.getMonth()+1}/${endD.getDate()}`,
+          isPeriodEstimate:true
+        });
+      }
+    }
+    return list.sort((a,b)=> (a.time||'99:99').localeCompare(b.time||'99:99'));
   }
 
   function renderDayList(){
@@ -1242,7 +1597,10 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
         </div>
       </div>
     `;
-    card.addEventListener('click', ()=> openForm(e));
+    card.addEventListener('click', ()=>{
+      if(e.isPeriodEstimate){ openCycleSheet(); return; }
+      openForm(e);
+    });
     return card;
   }
 
@@ -1258,7 +1616,85 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
     renderDayList();
     renderMonthList();
     renderCountdown();
+    renderTodayBadge();
+    renderTodos();
   }
+
+  function renderTodayBadge(){
+    const badge = $('todayBadge');
+    const count = getEventsForDate(today).length;
+    if(count>0){
+      badge.textContent = count>9 ? '9+' : String(count);
+      badge.style.display = 'flex';
+    } else {
+      badge.style.display = 'none';
+    }
+  }
+
+  // ---------- 待辦清單(不綁日期) ----------
+  function renderTodos(){
+    const wrap = $('todoList');
+    wrap.innerHTML = '';
+    const undone = todos.filter(t=>!t.done);
+    const done = todos.filter(t=>t.done);
+    $('todoCount').textContent = todos.length ? `${undone.length} 件未完成` : '';
+
+    if(todos.length===0){
+      wrap.innerHTML = `<div class="empty-state" style="padding:24px 10px;"><span class="emoji">📝</span>還沒有待辦事項</div>`;
+      return;
+    }
+    undone.forEach(t=> wrap.appendChild(buildTodoItem(t)));
+    done.forEach(t=> wrap.appendChild(buildTodoItem(t)));
+    if(done.length){
+      const clear = document.createElement('div');
+      clear.className = 'todo-clear-done';
+      clear.textContent = `清除已完成的 ${done.length} 件`;
+      clear.addEventListener('click', async ()=>{
+        todos = todos.filter(t=>!t.done);
+        await saveTodos();
+        renderTodos();
+      });
+      wrap.appendChild(clear);
+    }
+  }
+  function buildTodoItem(t){
+    const item = document.createElement('div');
+    item.className = 'todo-item';
+    const check = document.createElement('div');
+    check.className = 'todo-check' + (t.done?' done':'');
+    check.textContent = t.done ? '✓' : '';
+    check.addEventListener('click', async ()=>{
+      t.done = !t.done;
+      await saveTodos();
+      renderTodos();
+    });
+    const text = document.createElement('span');
+    text.className = 'todo-text' + (t.done?' done':'');
+    text.textContent = t.text;
+    const del = document.createElement('span');
+    del.className = 'todo-del';
+    del.textContent = '刪除';
+    del.addEventListener('click', async ()=>{
+      todos = todos.filter(x=>x.id!==t.id);
+      await saveTodos();
+      renderTodos();
+    });
+    item.appendChild(check);
+    item.appendChild(text);
+    item.appendChild(del);
+    return item;
+  }
+  async function addTodo(){
+    const input = $('todoInput');
+    const text = input.value.trim();
+    if(!text) return;
+    todos.push({id:'todo-'+Date.now()+'-'+Math.random().toString(36).slice(2,7), text, done:false, createdAt:new Date().toISOString(), createdBy: me||'未知'});
+    input.value = '';
+    await saveTodos();
+    renderTodos();
+  }
+  $('todoAddBtn').addEventListener('click', addTodo);
+  $('todoInput').addEventListener('keydown', (e)=>{ if(e.key==='Enter') addTodo(); });
 
   $('prevBtn').addEventListener('click', ()=>{
     if(viewMode==='month'){
@@ -1302,7 +1738,7 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
       opt.className = 'cat-opt' + (currentCat===c.key?' active':'');
       opt.textContent = c.icon + ' ' + c.label;
       opt.dataset.c = c.key;
-      opt.addEventListener('click', ()=>{ currentCat = c.key; renderCatPicker(); });
+      opt.addEventListener('click', ()=>{ currentCat = c.key; renderCatPicker(); if(typeof updateDurationHint==='function') updateDurationHint(); });
       wrap.appendChild(opt);
     });
   }
@@ -1315,10 +1751,15 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
     return {start: days[0], end: days[days.length-1], count: days.length};
   }
 
+  let editingOccurrenceYear = null;
   function openForm(evt){
     editingTripId = evt && evt.tripId ? evt.tripId : null;
     editingId = evt && !editingTripId ? evt.id : null;
     const isTrip = !!editingTripId;
+    // getEventsForDate 回傳的物件，備註可能已經被替換成單年度覆寫版本；
+    // 這裡改用原始資料，確保「基礎備註」欄位顯示的是預設值，不會把覆寫內容誤存回去
+    const rawEvt = evt && evt.id ? (events.find(x=>x.id===evt.id) || evt) : evt;
+    editingOccurrenceYear = (evt && evt.repeat==='yearly' && evt.occurrenceYear) ? evt.occurrenceYear : null;
 
     $('formTitle').textContent = isTrip ? '編輯整趟旅遊' : (evt ? '編輯行程' : '新增行程');
     $('fTitle').value = evt ? evt.title : '';
@@ -1348,7 +1789,15 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
       $('fRepeat').checked = !!(evt && evt.repeat==='yearly');
     }
 
-    $('fNote').value = evt ? (evt.note||'') : '';
+    $('fNote').value = rawEvt ? (rawEvt.note||'') : '';
+    if(editingOccurrenceYear){
+      $('yearNoteField').style.display = 'block';
+      $('yearNoteLabel').textContent = `${editingOccurrenceYear} 年專屬備註（選填）`;
+      $('fYearNote').value = (rawEvt.yearNotes && rawEvt.yearNotes[editingOccurrenceYear]) || '';
+    } else {
+      $('yearNoteField').style.display = 'none';
+      $('fYearNote').value = '';
+    }
     setPerson(evt ? evt.person : (me || 'both'));
     currentCat = evt ? eventCategory(evt) : 'life';
     renderCatPicker();
@@ -1357,18 +1806,19 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
 
     const metaEl = $('editMeta');
     let metaText = '';
-    if(evt && evt.editedBy){
-      const dt = evt.editedAt ? new Date(evt.editedAt) : null;
-      metaText += `上次編輯：${personLabel[evt.editedBy]||evt.editedBy}${dt?`・${pad(dt.getMonth()+1)}/${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`:''}`;
+    if(rawEvt && rawEvt.editedBy){
+      const dt = rawEvt.editedAt ? new Date(rawEvt.editedAt) : null;
+      metaText += `上次編輯：${personLabel[rawEvt.editedBy]||rawEvt.editedBy}${dt?`・${pad(dt.getMonth()+1)}/${pad(dt.getDate())} ${pad(dt.getHours())}:${pad(dt.getMinutes())}`:''}`;
     }
     if(evt && evt.repeat==='yearly'){
-      metaText += (metaText?'　':'') + '此行程每年重複，編輯／刪除會套用到所有年份';
+      metaText += (metaText?'　':'') + '此行程每年重複，編輯／刪除會套用到所有年份（下方單年度備註除外）';
     }
     if(isTrip){
       metaText += (metaText?'　':'') + '此為連續多天旅遊，編輯／刪除會套用到整趟行程';
     }
     if(metaText){ metaEl.style.display='block'; metaEl.textContent = metaText; }
     else { metaEl.style.display = 'none'; }
+    updateDurationHint();
     formOverlay.classList.add('show');
     setTimeout(()=> $('fTitle').focus(), 250);
   }
@@ -1396,6 +1846,7 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
         const days = expandDateRange(date, endDate).length;
         $('formHint').textContent = `這是連續 ${days} 天 ${Math.max(days-1,0)} 夜的旅遊，調整起訖日期會重新排列每一天`;
       }
+      updatePeriodOverlapHint(date, endDate||date);
       return;
     }
     if(date && endDate && endDate>date){
@@ -1404,6 +1855,25 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
     } else {
       $('formHint').textContent = '填結束日期會把同一筆行程展開到每一天，月曆上會顯示成一條連續色帶';
     }
+    updatePeriodOverlapHint(date, endDate||date);
+  }
+
+  function updatePeriodOverlapHint(date, endDate){
+    const hintEl = $('periodOverlapHint');
+    if(!date || cycleData.logs.length===0 || currentCat==='period'){
+      hintEl.style.display = 'none';
+      return;
+    }
+    const occs = getCycleOccurrences(date, endDate||date);
+    if(occs.length===0){
+      hintEl.style.display = 'none';
+      return;
+    }
+    const o = occs[0];
+    const s = new Date(o.start+'T00:00:00');
+    const en = new Date(o.end+'T00:00:00');
+    hintEl.textContent = `🌷 這段日期跟預估經期重疊（${s.getMonth()+1}/${s.getDate()}～${en.getMonth()+1}/${en.getDate()}），可以留意一下`;
+    hintEl.style.display = 'block';
   }
 
   $('saveBtn').addEventListener('click', async ()=>{
@@ -1458,6 +1928,16 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
       if(editingId){
         const idx = events.findIndex(e=>e.id===editingId);
         if(idx>-1) payload.tripId = events[idx].tripId;
+        // 單年度專屬備註：保留原本的 yearNotes，只更新目前正在編輯的那一年
+        if(idx>-1 && payload.repeat==='yearly'){
+          const existingYearNotes = Object.assign({}, events[idx].yearNotes||{});
+          if(editingOccurrenceYear){
+            const yn = $('fYearNote').value.trim();
+            if(yn) existingYearNotes[editingOccurrenceYear] = yn;
+            else delete existingYearNotes[editingOccurrenceYear];
+          }
+          if(Object.keys(existingYearNotes).length) payload.yearNotes = existingYearNotes;
+        }
         if(idx>-1) events[idx] = payload; else events.push(payload);
       } else {
         events.push(payload);
@@ -1508,6 +1988,47 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
       showToast(card.dataset.p==='husband' ? '你好，Kian 🤵' : '你好，Evelyn 👰');
     });
   });
+
+  // ---------- 明日行程提醒(瀏覽器通知) ----------
+  $('notifyBtn').addEventListener('click', async ()=>{
+    if(!('Notification' in window)){
+      showToast('這個瀏覽器不支援通知功能');
+      return;
+    }
+    if(Notification.permission==='granted'){
+      showToast('已經開啟通知囉');
+      checkTomorrowReminder(true);
+      return;
+    }
+    if(Notification.permission==='denied'){
+      showToast('通知權限已被封鎖，請到瀏覽器設定裡手動開啟');
+      return;
+    }
+    const perm = await Notification.requestPermission();
+    if(perm==='granted'){
+      showToast('通知已開啟，明天有安排時會提醒');
+      localStorage.removeItem('cal_lastNotifyDate');
+      checkTomorrowReminder(true);
+    } else {
+      showToast('沒有開啟通知，之後想開再點一次就好');
+    }
+  });
+  function checkTomorrowReminder(force){
+    if(!('Notification' in window) || Notification.permission!=='granted') return;
+    const todayKeyStr = dateKey(today);
+    if(!force && localStorage.getItem('cal_lastNotifyDate')===todayKeyStr) return;
+    const tomorrow = addDays(today, 1);
+    const items = getEventsForDate(tomorrow).filter(e=>!e.isPeriodEstimate);
+    if(items.length){
+      const titles = items.slice(0,3).map(e=>e.title).join('、');
+      try{
+        new Notification('🗓️ 明天的行程提醒', {
+          body: titles + (items.length>3 ? `　等共 ${items.length} 筆` : '')
+        });
+      }catch(e){}
+    }
+    localStorage.setItem('cal_lastNotifyDate', todayKeyStr);
+  }
 
   const searchOverlay = $('searchOverlay');
   $('searchBtn').addEventListener('click', ()=>{
@@ -1560,6 +2081,179 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
     });
   });
 
+  // ---------- 年度分類統計 ----------
+  const statsOverlay = $('statsOverlay');
+  let statsYear = today.getFullYear();
+
+  function getYearOccurrences(year){
+    const seenTrip = new Set();
+    const list = [];
+    events.forEach(e=>{
+      let occDate;
+      if(e.repeat==='yearly'){
+        const baseYear = baseYearOf(e);
+        if(year < baseYear) return;
+        occDate = `${year}-${monthDayOf(e)}`;
+      } else {
+        if(parseInt(e.date.slice(0,4),10) !== year) return;
+        occDate = e.date;
+      }
+      if(e.tripId){
+        if(seenTrip.has(e.tripId)) return;
+        seenTrip.add(e.tripId);
+      }
+      list.push(Object.assign({}, e, {occDate}));
+    });
+    return list;
+  }
+
+  function renderStats(){
+    $('statsYearTitle').textContent = `${statsYear}年 分類統計`;
+    const list = getYearOccurrences(statsYear);
+    const wrap = $('statsList');
+    wrap.innerHTML = '';
+    if(list.length===0){
+      wrap.innerHTML = `<div class="empty-state"><span class="emoji">📊</span>這一年還沒有任何行程紀錄</div>`;
+      return;
+    }
+    const grouped = {};
+    list.forEach(e=>{
+      const cat = eventCategory(e);
+      (grouped[cat] = grouped[cat]||[]).push(e);
+    });
+    CATS.forEach(c=>{
+      const items = (grouped[c.key]||[]).sort((a,b)=> a.occDate.localeCompare(b.occDate));
+      if(items.length===0) return;
+      const row = document.createElement('div');
+      row.className = 'stats-row';
+      const head = document.createElement('div');
+      head.className = 'stats-row-head';
+      head.innerHTML = `<span>${c.icon} ${c.label}</span><span class="stats-count">${items.length} 筆</span>`;
+      const detail = document.createElement('div');
+      detail.className = 'stats-detail';
+      detail.style.display = 'none';
+      items.forEach(e=>{
+        const d = new Date(e.occDate+'T00:00:00');
+        const line = document.createElement('div');
+        line.className = 'stats-item';
+        line.textContent = `${d.getMonth()+1}/${d.getDate()}（${weekNames[d.getDay()]}） ${e.title}`;
+        detail.appendChild(line);
+      });
+      head.addEventListener('click', ()=>{
+        detail.style.display = detail.style.display==='none' ? 'block' : 'none';
+      });
+      row.appendChild(head);
+      row.appendChild(detail);
+      wrap.appendChild(row);
+    });
+  }
+
+  $('statsBtn').addEventListener('click', ()=>{
+    statsYear = today.getFullYear();
+    renderStats();
+    statsOverlay.classList.add('show');
+  });
+  statsOverlay.addEventListener('click', (e)=>{ if(e.target===statsOverlay) statsOverlay.classList.remove('show'); });
+  $('statsPrevYear').addEventListener('click', ()=>{ statsYear--; renderStats(); });
+  $('statsNextYear').addEventListener('click', ()=>{ statsYear++; renderStats(); });
+
+  $('exportBtn').addEventListener('click', ()=>{
+    const payload = {
+      exportedAt: new Date().toISOString(),
+      exportedBy: me || '未知',
+      events,
+      cycleData
+    };
+    const blob = new Blob([JSON.stringify(payload, null, 2)], {type:'application/json'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    const d = new Date();
+    a.href = url;
+    a.download = `我們的行事曆-備份-${d.getFullYear()}${pad(d.getMonth()+1)}${pad(d.getDate())}.json`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(()=> URL.revokeObjectURL(url), 2000);
+    showToast('已下載備份檔案');
+  });
+
+  // ---------- 經期記錄 ----------
+  const cycleOverlay = $('cycleOverlay');
+  function renderCycleSummary(){
+    const avg = computeAvgCycle();
+    const summaryEl = $('cycleSummary');
+    if(cycleData.logs.length===0){
+      summaryEl.textContent = '尚無紀錄，先新增一筆開始日期吧';
+      return;
+    }
+    const logs = [...cycleData.logs].sort();
+    const lastLog = logs[logs.length-1];
+    const lastD = new Date(lastLog+'T00:00:00');
+    let text = `最近一次開始：${lastD.getMonth()+1}/${lastD.getDate()}`;
+    if(avg){
+      const basis = cycleData.logs.length>=2 ? `依過去 ${logs.length} 次紀錄平均` : '依手動輸入的天數';
+      text += `　平均週期：${avg} 天（${basis}）`;
+      const occs = getCycleOccurrences(dateKey(today), dateKey(addDays(today, avg*3)));
+      const future = occs.filter(o=> o.start >= dateKey(today));
+      if(future.length){
+        const nd = new Date(future[0].start+'T00:00:00');
+        const diffDays = Math.round((nd - today)/86400000);
+        text += `　下次預估：${nd.getMonth()+1}/${nd.getDate()}（還有 ${diffDays} 天）`;
+      }
+    } else {
+      text += '　還需要至少 2 筆紀錄，或先填手動天數才能估算';
+    }
+    summaryEl.textContent = text;
+  }
+  function renderCycleLogList(){
+    const wrap = $('cycleLogList');
+    wrap.innerHTML = '';
+    const logs = [...cycleData.logs].sort().reverse();
+    if(logs.length===0){
+      wrap.innerHTML = '<div class="search-empty">還沒有任何紀錄</div>';
+      return;
+    }
+    logs.forEach(dateStr=>{
+      const d = new Date(dateStr+'T00:00:00');
+      const item = document.createElement('div');
+      item.className = 'cycle-log-item';
+      item.innerHTML = `<span>${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}（${weekNames[d.getDay()]}）</span><span class="cycle-log-del">刪除</span>`;
+      item.querySelector('.cycle-log-del').addEventListener('click', async ()=>{
+        cycleData.logs = cycleData.logs.filter(x=>x!==dateStr);
+        await saveCycleData();
+        renderCycleSummary(); renderCycleLogList(); renderAll();
+        showToast('已刪除');
+      });
+      wrap.appendChild(item);
+    });
+  }
+  function openCycleSheet(){
+    $('cycleManualLen').value = cycleData.manualCycleLength || '';
+    $('cycleNewDate').value = dateKey(today);
+    renderCycleSummary();
+    renderCycleLogList();
+    cycleOverlay.classList.add('show');
+  }
+  $('cycleBtn').addEventListener('click', openCycleSheet);
+  $('cycleCloseBtn').addEventListener('click', ()=> cycleOverlay.classList.remove('show'));
+  cycleOverlay.addEventListener('click', (e)=>{ if(e.target===cycleOverlay) cycleOverlay.classList.remove('show'); });
+  $('cycleManualLen').addEventListener('change', async ()=>{
+    const v = parseInt($('cycleManualLen').value, 10);
+    cycleData.manualCycleLength = (v && v>=15 && v<=60) ? v : null;
+    await saveCycleData();
+    renderCycleSummary();
+    renderAll();
+  });
+  $('cycleAddBtn').addEventListener('click', async ()=>{
+    const dateStr = $('cycleNewDate').value;
+    if(!dateStr){ showToast('請選擇日期'); return; }
+    if(cycleData.logs.includes(dateStr)){ showToast('這天已經記錄過了'); return; }
+    cycleData.logs.push(dateStr);
+    await saveCycleData();
+    renderCycleSummary(); renderCycleLogList(); renderAll();
+    showToast('已新增紀錄');
+  });
+
   function expandDateRange(startStr, endStr){
     const out = [];
     let d = new Date(startStr+'T00:00:00');
@@ -1589,7 +2283,9 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
     {idBase:'garmin-run-2026-trip', title:'Garmin run 10k', start:'2026-11-28', end:'2026-11-29', note:'住宿:維多麗亞酒店', category:'run'},
     {idBase:'hakodate-fukuoka-2026', title:'星宇函館去 福岡回', start:'2026-10-24', end:'2026-11-02', category:'travel'},
     {idBase:'kobe-osaka-trip-2026', title:'星宇神戶去 大阪回', start:'2026-11-12', end:'2026-11-16', category:'travel'},
-    {idBase:'osaka-roundtrip-2027', title:'星宇大阪來回', start:'2027-02-25', end:'2027-03-02', category:'travel'}
+    {idBase:'osaka-roundtrip-2027', title:'星宇大阪來回', start:'2027-02-25', end:'2027-03-02', category:'travel'},
+    {idBase:'westin-taoyuan-2026', title:'The Westin Tashee Resort, Taoyuan', start:'2026-12-05', end:'2026-12-06', note:'訂位確認號 87057289', category:'travel'},
+    {idBase:'w-taipei-2026', title:'W Taipei', start:'2026-12-19', end:'2026-12-20', note:'訂位確認號 76218721', category:'travel'}
   ];
   async function seedIfNeeded(){
     let changed = false;
@@ -1656,6 +2352,38 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
     saveTheme(next);
   });
 
+  // ---------- 離線快取(Service Worker，用 Blob URL 註冊，不需要額外檔案) ----------
+  function registerOfflineCache(){
+    if(!('serviceWorker' in navigator)) return;
+    const swCode = `
+      const CACHE_NAME = 'couple-calendar-shell-v1';
+      self.addEventListener('install', (e)=>{
+        e.waitUntil(caches.open(CACHE_NAME).then(cache=> cache.add(self.registration.scope)));
+        self.skipWaiting();
+      });
+      self.addEventListener('activate', (e)=>{ self.clients.claim(); });
+      self.addEventListener('fetch', (e)=>{
+        if(e.request.method !== 'GET') return;
+        e.respondWith(
+          caches.match(e.request).then(cached=>{
+            const fetchPromise = fetch(e.request).then(res=>{
+              if(res && res.status===200){
+                caches.open(CACHE_NAME).then(cache=> cache.put(e.request, res.clone()));
+              }
+              return res;
+            }).catch(()=> cached);
+            return cached || fetchPromise;
+          })
+        );
+      });
+    `;
+    try{
+      const blob = new Blob([swCode], {type:'application/javascript'});
+      const swUrl = URL.createObjectURL(blob);
+      navigator.serviceWorker.register(swUrl, {scope:'./'}).catch(()=>{});
+    }catch(e){ /* 部分瀏覽器不支援 Blob URL 註冊 Service Worker，靜默略過即可 */ }
+  }
+
   async function init(){
     renderCatFilter();
     applyTheme(loadTheme() || 'light');
@@ -1667,6 +2395,8 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
       setTimeout(()=> idOverlay.classList.add('show'), 500);
     }
     startRealtimeSync();
+    registerOfflineCache();
+    checkTomorrowReminder();
   }
   init();
 })();
