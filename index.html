@@ -20,28 +20,28 @@
     --ink:#3A2E1E;
     --ink-soft:#7A6B4E;
     --line:#F0E2BE;
-    --brand:#357A44;
+    --brand:#007E35;
     --brand-soft:#E3F3E2;
-    --husband:#1F6FA0;
+    --husband:#006FBD;
     --husband-soft:#E1F0FA;
-    --wife:#9E421A;
+    --wife:#B33C00;
     --wife-soft:#F7DDC9;
-    --both:#865808;
+    --both:#905B00;
     --both-soft:#F5E4B8;
     --danger:#C43F26;
-    --header-bg:#2A6E3B;
+    --header-bg:#008939;
     --radius:18px;
     --radius-sm:12px;
     --shadow:0 3px 12px rgba(58,46,30,0.10);
     --shadow-lg:0 12px 28px rgba(58,46,30,0.20);
-    --gold:#865808;
+    --gold:#905B00;
     --dot-color:rgba(58,46,30,0.05);
     --input-bg:#FFFAEC;
     --ghost-bg:#F3E7C6;
     --muted-2:#E0CE9C;
     --muted-3:#C7B481;
-    --period:#A8447A;
-    --period-soft:#F6E3EF;
+    --period:#B23264;
+    --period-soft:#F9DCE8;
   }
   html[data-theme="dark"]{
     --bg:#1A2018;
@@ -49,17 +49,17 @@
     --ink:#F5EFDD;
     --ink-soft:#B0A688;
     --line:#3C4433;
-    --brand:#7FCB8E;
+    --brand:#00B14A;
     --brand-soft:#28361F;
-    --husband:#6FB8E8;
+    --husband:#0F9BFF;
     --husband-soft:#20323F;
-    --wife:#F0955F;
+    --wife:#FB6900;
     --wife-soft:#3D2C1E;
-    --both:#F0C158;
+    --both:#CA8D00;
     --both-soft:#3B3018;
     --danger:#F0876A;
-    --gold:#F0C158;
-    --header-bg:#2E6B3F;
+    --gold:#CA8D00;
+    --header-bg:#008939;
     --shadow:0 6px 18px rgba(0,0,0,0.35);
     --shadow-lg:0 14px 34px rgba(0,0,0,0.5);
     --dot-color:rgba(255,255,255,0.045);
@@ -67,7 +67,7 @@
     --ghost-bg:#333C2A;
     --muted-2:#4C4A36;
     --muted-3:#7A7358;
-    --period:#E7A0CB;
+    --period:#F7ACD1;
     --period-soft:#3A2432;
   }
   *{box-sizing:border-box; -webkit-tap-highlight-color:transparent;}
@@ -98,8 +98,9 @@
   header.top{
     padding:calc(env(safe-area-inset-top) + 18px) 20px 16px;
     background:var(--header-bg);
-    background:linear-gradient(160deg, #1F76A0 0%, var(--header-bg) 65%);
+    background:linear-gradient(160deg, #007DBC 0%, var(--header-bg) 65%);
     color:#fff;
+    text-shadow:0 1px 3px rgba(0,0,0,0.22);
     position:relative;
     overflow:hidden;
     border-radius:0 0 24px 24px;
@@ -374,6 +375,10 @@
     background:var(--period);
     opacity:0.55;
   }
+  .period-band.actual{opacity:1;}
+  .period-band.cap-l{background:linear-gradient(90deg, transparent, var(--period));}
+  .period-band.cap-r{background:linear-gradient(90deg, var(--period), transparent);}
+  .period-band.cap-l.cap-r{background:radial-gradient(ellipse, var(--period) 40%, transparent 85%);}
   .dots{
     display:flex;
     gap:3px;
@@ -455,6 +460,7 @@
   .event-tag.wife{background:var(--wife-soft); color:var(--wife);}
   .event-tag.both{background:var(--both-soft); color:var(--both);}
   .event-cat{font-size:11px; color:var(--ink-soft);}
+  .event-cat.unplanned{color:var(--danger);}
   .edit-meta{font-size:11px; color:var(--muted-3); margin-top:8px;}
   .week-day-header{
     font-size:12.5px;
@@ -699,6 +705,25 @@
   }
   .stats-item:last-child{border-bottom:none;}
 
+  /* ---------- Cost stats summary ---------- */
+  .travel-cost-total{
+    background:var(--both-soft);
+    border-radius:var(--radius-sm);
+    padding:14px 16px;
+    margin-bottom:10px;
+  }
+  .travel-cost-total .tc-amount{
+    font-family:'Noto Serif TC', serif;
+    font-weight:700;
+    font-size:22px;
+    color:var(--both);
+  }
+  .travel-cost-total .tc-breakdown{
+    font-size:12.5px;
+    color:var(--ink-soft);
+    margin-top:6px;
+  }
+
   /* ---------- Cycle tracking ---------- */
   .cycle-summary{
     background:var(--period-soft);
@@ -790,6 +815,174 @@
     text-decoration:underline;
     cursor:pointer;
     padding:10px 0 4px;
+  }
+
+  /* ---------- Trip itinerary ---------- */
+  .itinerary-header{
+    display:flex;
+    align-items:flex-start;
+    justify-content:space-between;
+    gap:10px;
+    margin-bottom:20px;
+  }
+  #itineraryEditTripBtn{
+    flex:none;
+    padding:8px 13px;
+    font-size:12.5px;
+    width:auto;
+  }
+  .itin-day{margin-bottom:20px;}
+  .itin-day-head{
+    font-family:'Noto Serif TC', serif;
+    font-weight:700;
+    font-size:14.5px;
+    color:var(--brand);
+    margin-bottom:8px;
+    padding-bottom:6px;
+    border-bottom:1.5px solid var(--line);
+  }
+  .itin-item{
+    display:flex;
+    align-items:flex-start;
+    gap:10px;
+    background:var(--paper);
+    border:1px solid var(--line);
+    border-radius:var(--radius-sm);
+    padding:9px 12px;
+    margin-bottom:6px;
+  }
+  .itin-type-icon{flex:none; font-size:15px; line-height:1.5;}
+  .itin-time{
+    font-size:12.5px;
+    font-weight:700;
+    color:var(--ink-soft);
+    flex:none;
+    min-width:42px;
+    line-height:1.5;
+    font-variant-numeric:tabular-nums;
+  }
+  .itin-body{flex:1; min-width:0;}
+  .itin-text{font-size:14px; word-break:break-word;}
+  .itin-detail{font-size:12px; color:var(--ink-soft); margin-top:2px; word-break:break-word;}
+  .itin-map-link{
+    display:inline-block;
+    font-size:12px;
+    color:var(--husband);
+    margin-top:4px;
+    text-decoration:underline;
+  }
+  .itin-checklist-section{
+    padding-bottom:16px;
+    margin-bottom:18px;
+    border-bottom:1.5px dashed var(--line);
+  }
+  .itin-day-weather{
+    font-size:11.5px;
+    color:var(--husband);
+    text-decoration:underline;
+    margin-left:8px;
+    font-weight:500;
+  }
+  .itin-weather-slot{
+    font-size:12px;
+    font-weight:600;
+    color:var(--ink-soft);
+    margin-left:4px;
+  }
+  .itin-cross-ref{
+    display:block;
+    font-size:11.5px;
+    color:var(--wife);
+    text-decoration:underline;
+    margin-top:3px;
+    font-weight:500;
+    cursor:pointer;
+  }
+  .itin-item-actions{display:flex; flex-direction:column; gap:6px; flex:none; align-items:flex-end;}
+  .itin-del{color:var(--danger); font-size:12px; cursor:pointer; padding:2px 6px;}
+  .itin-edit{color:var(--husband); font-size:12px; cursor:pointer; padding:2px 6px;}
+  .itin-editing-badge{
+    font-size:12.5px;
+    color:var(--brand);
+    font-weight:600;
+    background:var(--brand-soft);
+    border-radius:10px;
+    padding:8px 12px;
+    margin-top:10px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+  }
+  .itin-cancel-edit{text-decoration:underline; cursor:pointer; font-weight:500;}
+  .itin-type-picker{
+    display:flex;
+    flex-wrap:wrap;
+    gap:6px;
+    margin-top:10px;
+  }
+  .itin-type-opt{
+    flex:1 1 27%;
+    text-align:center;
+    padding:7px 2px;
+    border-radius:10px;
+    border:1.5px solid var(--line);
+    font-size:11.5px;
+    cursor:pointer;
+    color:var(--ink-soft);
+    background:var(--input-bg);
+  }
+  .itin-type-opt.active{background:var(--brand-soft); border-color:var(--brand); color:var(--brand); font-weight:700;}
+  .itin-add-row{
+    display:flex;
+    gap:6px;
+    margin-top:6px;
+  }
+  .itin-time-input{
+    flex:none;
+    width:88px;
+    border:1.5px solid var(--line);
+    background:var(--input-bg);
+    border-radius:10px;
+    padding:8px 6px;
+    font-size:13px;
+    color:var(--ink);
+    font-family:inherit;
+  }
+  .itin-text-input{
+    flex:1;
+    min-width:0;
+    border:1.5px solid var(--line);
+    background:var(--input-bg);
+    border-radius:10px;
+    padding:8px 10px;
+    font-size:13.5px;
+    color:var(--ink);
+    font-family:inherit;
+  }
+  .itin-detail-input{
+    flex:1;
+    min-width:0;
+    border:1.5px solid var(--line);
+    background:var(--input-bg);
+    border-radius:10px;
+    padding:8px 10px;
+    font-size:12.5px;
+    color:var(--ink);
+    font-family:inherit;
+    margin-top:6px;
+  }
+  .itin-cost-input{flex:none; width:110px;}
+  .itin-time-input:focus, .itin-text-input:focus, .itin-detail-input:focus{outline:none; border-color:var(--brand);}
+  .itin-add-btn{
+    flex:none;
+    width:34px;
+    border:none;
+    background:var(--header-bg);
+    color:#fff;
+    border-radius:10px;
+    font-size:16px;
+    font-weight:700;
+    cursor:pointer;
   }
 
   .toast{
@@ -893,6 +1086,7 @@
       <span class="d-week" id="selWeek"></span>
       <span class="holiday-tag" id="selHolidayTag" style="display:none;"></span>
       <span class="holiday-tag company" id="selCompanyTag" style="display:none;"></span>
+      <span class="itin-weather-slot" id="selWeatherSlot" style="display:none;"></span>
     </div>
     <div id="eventList"></div>
 
@@ -950,6 +1144,14 @@
       <label>分類</label>
       <div class="cat-picker" id="catPicker"></div>
     </div>
+    <div class="field" id="placeField">
+      <label>地點（選填，用於天氣顯示與地圖連結）</label>
+      <input type="text" id="fPlace" placeholder="例如：神戶馬拉松會場">
+    </div>
+    <div class="field" id="costField">
+      <label>費用 NT$（選填，會依分類自動歸入年度花費統計）</label>
+      <input type="number" inputmode="numeric" id="fCost" placeholder="例如：報名費、門票、掛號費⋯">
+    </div>
     <div class="field">
       <label>備註（選填）</label>
       <textarea id="fNote" placeholder="想補充的細節⋯"></textarea>
@@ -985,6 +1187,11 @@
     <div class="skip-link" id="idSkip">先不設定</div>
     <button class="btn ghost" id="notifyBtn" style="width:100%; margin-top:14px;">🔔 開啟明日行程提醒</button>
     <p class="form-hint" style="text-align:center; margin:8px 0 0;">需要瀏覽器允許通知權限，且此頁面要有開啟過才會提醒</p>
+
+    <div class="field" style="margin-top:16px; text-align:left;">
+      <label>常用地點（一般行程的天氣會用這裡查）</label>
+      <input type="text" id="homeLocationInput" placeholder="例如：新竹市">
+    </div>
   </div>
 </div>
 
@@ -1037,6 +1244,37 @@
   </div>
 </div>
 
+<div class="overlay" id="itineraryOverlay">
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="itinerary-header">
+      <div style="min-width:0;">
+        <h2 id="itineraryTitle" style="margin:0 0 4px; word-break:break-word;">旅遊行程</h2>
+        <p class="form-hint" id="itinerarySubtitle" style="margin:0; display:block;"></p>
+        <p class="form-hint" id="itineraryCostBreakdown" style="margin:2px 0 0; display:none;"></p>
+      </div>
+      <button class="btn ghost" id="itineraryEditTripBtn">✏️ 編輯旅遊資訊</button>
+    </div>
+
+    <div class="itin-checklist-section">
+      <div class="todo-header" style="margin:0 0 10px;">
+        <h2 style="font-family:'Noto Serif TC',serif; font-size:15px; margin:0;">✅ 行前檢查清單</h2>
+        <span class="todo-count" id="itinChecklistCount"></span>
+      </div>
+      <div class="todo-add-row">
+        <input type="text" id="itinChecklistInput" placeholder="例如：機票、證件、門票確認⋯">
+        <button id="itinChecklistAddBtn">新增</button>
+      </div>
+      <div id="itinChecklistList"></div>
+    </div>
+
+    <div id="itineraryDays"></div>
+    <div class="sheet-actions">
+      <button class="btn ghost" id="itineraryCloseBtn" style="width:100%;">關閉</button>
+    </div>
+  </div>
+</div>
+
 <div class="overlay" id="statsOverlay">
   <div class="sheet">
     <div class="sheet-handle"></div>
@@ -1046,6 +1284,10 @@
       <button id="statsNextYear">›</button>
     </div>
     <div id="statsList"></div>
+
+    <h2 style="font-family:'Noto Serif TC',serif; font-size:16px; margin:24px 0 12px;">💰 年度花費統計</h2>
+    <div id="costStatsSummary"></div>
+
     <button class="btn ghost" id="exportBtn" style="width:100%; margin-top:18px;">💾 匯出備份（JSON）</button>
   </div>
 </div>
@@ -1146,6 +1388,7 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
   let activeCats = new Set(CATS.map(c=>c.key));
   let cycleData = {manualCycleLength:null, logs:[]};
   let todos = [];
+  let homeLocation = '';
 
   function getWeekStart(d){
     const nd = new Date(d);
@@ -1194,19 +1437,30 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
   function getCycleOccurrences(rangeStart, rangeEnd){
     const logs = [...cycleData.logs].sort();
     if(logs.length===0) return [];
-    const avgCycle = computeAvgCycle();
-    if(!avgCycle) return [];
-    const anchor = new Date(logs[logs.length-1]+'T00:00:00');
     const rStart = new Date(rangeStart+'T00:00:00');
     const rEnd = new Date(rangeEnd+'T00:00:00');
-    const minK = Math.floor((rStart - anchor)/86400000/avgCycle) - 1;
-    const maxK = Math.ceil((rEnd - anchor)/86400000/avgCycle) + 1;
     const results = [];
-    for(let k=minK; k<=maxK; k++){
-      const occStart = new Date(anchor); occStart.setDate(occStart.getDate() + k*avgCycle);
+    // 1. 每一筆「實際記錄」的日期，直接顯示真實區間，不用平均值往回推算
+    logs.forEach(logDate=>{
+      const occStart = new Date(logDate+'T00:00:00');
       const occEnd = new Date(occStart); occEnd.setDate(occEnd.getDate() + PERIOD_LENGTH - 1);
-      if(occEnd < rStart || occStart > rEnd) continue;
-      results.push({start: dateKey(occStart), end: dateKey(occEnd)});
+      if(occEnd < rStart || occStart > rEnd) return;
+      results.push({start: logDate, end: dateKey(occEnd), isActual:true});
+    });
+    // 2. 只有超過「最近一次記錄」之後的日子，才用平均週期往未來推算預估值
+    const avgCycle = computeAvgCycle();
+    if(avgCycle){
+      const lastLog = new Date(logs[logs.length-1]+'T00:00:00');
+      let k = 1;
+      while(k<=36){
+        const occStart = new Date(lastLog); occStart.setDate(occStart.getDate() + k*avgCycle);
+        if(occStart > rEnd) break;
+        const occEnd = new Date(occStart); occEnd.setDate(occEnd.getDate() + PERIOD_LENGTH - 1);
+        if(!(occEnd < rStart)){
+          results.push({start: dateKey(occStart), end: dateKey(occEnd), isActual:false});
+        }
+        k++;
+      }
     }
     return results;
   }
@@ -1230,7 +1484,7 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
   }
 
   function cacheLocalSnapshot(){
-    try{ localStorage.setItem('cal_cache', JSON.stringify({events, cycleData, todos, cachedAt:new Date().toISOString()})); }catch(e){}
+    try{ localStorage.setItem('cal_cache', JSON.stringify({events, cycleData, todos, homeLocation, cachedAt:new Date().toISOString()})); }catch(e){}
   }
   function loadLocalSnapshot(){
     try{
@@ -1242,6 +1496,7 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
         ? {manualCycleLength: cached.cycleData.manualCycleLength||null, logs: Array.isArray(cached.cycleData.logs)?cached.cycleData.logs:[]}
         : {manualCycleLength:null, logs:[]};
       todos = Array.isArray(cached.todos) ? cached.todos : [];
+      homeLocation = typeof cached.homeLocation==='string' ? cached.homeLocation : '';
       return true;
     }catch(e){ return false; }
   }
@@ -1254,6 +1509,7 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
         ? {manualCycleLength: data.cycleData.manualCycleLength||null, logs: Array.isArray(data.cycleData.logs)?data.cycleData.logs:[]}
         : {manualCycleLength:null, logs:[]};
       todos = Array.isArray(data.todos) ? data.todos : [];
+      homeLocation = typeof data.homeLocation==='string' ? data.homeLocation : '';
       cacheLocalSnapshot();
     }catch(e){
       const hasCache = loadLocalSnapshot();
@@ -1284,6 +1540,15 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
       cacheLocalSnapshot();
     }catch(e){
       console.error('saveTodos failed:', e);
+      showToast('儲存失敗，請確認網路連線後再試一次');
+    }
+  }
+  async function saveHomeLocation(){
+    try{
+      await setDoc(sharedDocRef, stripUndefined({ homeLocation }), { merge:true });
+      cacheLocalSnapshot();
+    }catch(e){
+      console.error('saveHomeLocation failed:', e);
       showToast('儲存失敗，請確認網路連線後再試一次');
     }
   }
@@ -1319,6 +1584,7 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
         ? {manualCycleLength: data.cycleData.manualCycleLength||null, logs: Array.isArray(data.cycleData.logs)?data.cycleData.logs:[]}
         : {manualCycleLength:null, logs:[]};
       todos = Array.isArray(data.todos) ? data.todos : [];
+      homeLocation = typeof data.homeLocation==='string' ? data.homeLocation : '';
       cacheLocalSnapshot();
       renderAll();
       handleIncomingActivity(data.lastActivity);
@@ -1474,7 +1740,10 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
           const cycleOcc = cycleOccurrenceAt(key);
           if(cycleOcc){
             const band = document.createElement('div');
-            band.className = 'period-band';
+            band.className = 'period-band'
+              + (cycleOcc.isActual ? ' actual' : '')
+              + (key===cycleOcc.start ? ' cap-l' : '')
+              + (key===cycleOcc.end ? ' cap-r' : '');
             div.appendChild(band);
           }
         }
@@ -1527,11 +1796,12 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
       if(occ){
         const startD = new Date(occ.start+'T00:00:00');
         const endD = new Date(occ.end+'T00:00:00');
+        const rangeText = `${startD.getMonth()+1}/${startD.getDate()} ～ ${endD.getMonth()+1}/${endD.getDate()}`;
         list.push({
           id:'period-'+occ.start, date:key, time:'', person:'wife', category:'period',
-          title:'經期（預估）',
-          note:`預估區間 ${startD.getMonth()+1}/${startD.getDate()} ～ ${endD.getMonth()+1}/${endD.getDate()}`,
-          isPeriodEstimate:true
+          title: occ.isActual ? '經期（實際紀錄）' : '經期（預估）',
+          note: occ.isActual ? `區間 ${rangeText}` : `預估區間 ${rangeText}`,
+          isPeriodEstimate:true, groupEndDate: occ.end
         });
       }
     }
@@ -1541,14 +1811,38 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
   function renderDayList(){
     $('selDate').textContent = `${selected.getMonth()+1}月${selected.getDate()}日`;
     $('selWeek').textContent = '星期' + weekNames[selected.getDay()];
-    const hName = holidayName(dateKey(selected));
+    const selKey = dateKey(selected);
+    const hName = holidayName(selKey);
     const tagEl = $('selHolidayTag');
     if(hName){ tagEl.style.display='inline-block'; tagEl.textContent = '🎌 ' + hName; }
     else { tagEl.style.display = 'none'; }
-    const cHoliday = companyHoliday(dateKey(selected));
+    const cHoliday = companyHoliday(selKey);
     const cTagEl = $('selCompanyTag');
     if(cHoliday){ cTagEl.style.display='inline-block'; cTagEl.textContent = `🏢 ${cHoliday.name}（${personLabel[cHoliday.person]}放假）`; }
     else { cTagEl.style.display = 'none'; }
+
+    // 當日天氣：優先順序為「旅遊標題」>「該日行程自己填的地點」>「常用地點」；
+    // 過去的日期查歷史實際紀錄，未來最多查16天內的預報，查不到就不顯示
+    const weatherSlot = $('selWeatherSlot');
+    weatherSlot.style.display = 'none';
+    const diffDays = Math.round((selected - today) / 86400000);
+    if(diffDays<=15){
+      const dayEventsForWeather = events.filter(e=>e.date===selKey);
+      const tripEvOnDay = dayEventsForWeather.find(e=>e.tripId);
+      const placeEvOnDay = dayEventsForWeather.find(e=>e.place);
+      const weatherPlace = tripEvOnDay ? tripEvOnDay.title : (placeEvOnDay ? placeEvOnDay.place : homeLocation);
+      if(weatherPlace){
+        fetchDayWeather(weatherPlace, selKey).then(w=>{
+          if(dateKey(selected) !== selKey) return; // 使用者已經切換到別的日期，結果過期就不處理
+          if(w && w.code!==undefined){
+            const wi = weatherIconFor(w.code);
+            weatherSlot.innerHTML = `${wi.icon} ${wi.label} ${Math.round(w.min)}°～${Math.round(w.max)}°（${w.isHistorical?'實際':'預估'}・${escapeHtml(weatherPlace)}）`;
+            weatherSlot.style.display = 'inline-block';
+          }
+        });
+      }
+    }
+
     const list = getEventsForDate(selected);
     const wrap = $('eventList');
     wrap.innerHTML = '';
@@ -1573,17 +1867,35 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
     }
     wrap.innerHTML = '';
     let any = false;
+    const shownGroups = new Set(); // 記錄已經顯示過的多天旅遊(tripId)／經期預估(id)，避免逐日重複列出
     rangeDates.forEach(d=>{
-      const list = getEventsForDate(d);
+      const key = dateKey(d);
+      const list = getEventsForDate(d).filter(e=>{
+        const groupKey = e.tripId || (e.isPeriodEstimate ? e.id : null);
+        if(!groupKey) return true;
+        if(shownGroups.has(groupKey)) return false;
+        shownGroups.add(groupKey);
+        return true;
+      });
       if(list.length===0) return;
       any = true;
-      const key = dateKey(d);
       const isToday = key===dateKey(today);
       const hName = holidayName(key);
       const cHoliday = companyHoliday(key);
+      // 如果這天是多天旅遊或經期預估的起始日，標題顯示完整起訖範圍，而不只是單一天
+      let dateLabel = `${d.getMonth()+1}/${d.getDate()}（${weekNames[d.getDay()]}）`;
+      const groupItem = list.find(e=> e.tripId || e.groupEndDate);
+      if(groupItem){
+        let endKey = groupItem.groupEndDate;
+        if(!endKey && groupItem.tripId) endKey = tripRange(groupItem.tripId).end;
+        if(endKey && endKey!==key){
+          const endD = new Date(endKey+'T00:00:00');
+          dateLabel = `${d.getMonth()+1}/${d.getDate()} ～ ${endD.getMonth()+1}/${endD.getDate()}（${weekNames[d.getDay()]}～${weekNames[endD.getDay()]}）`;
+        }
+      }
       const header = document.createElement('div');
       header.className = 'week-day-header' + (isToday?' is-today':'');
-      header.innerHTML = `${d.getMonth()+1}/${d.getDate()}（${weekNames[d.getDay()]}）${isToday?'・今天':''}${hName?` <span class="holiday-tag">🎌 ${hName}</span>`:''}${cHoliday?` <span class="holiday-tag company">🏢 ${cHoliday.name}</span>`:''}`;
+      header.innerHTML = `${dateLabel}${isToday?'・今天':''}${hName?` <span class="holiday-tag">🎌 ${hName}</span>`:''}${cHoliday?` <span class="holiday-tag company">🏢 ${cHoliday.name}</span>`:''}`;
       wrap.appendChild(header);
       list.forEach(e=> wrap.appendChild(buildEventCard(e)));
     });
@@ -1597,25 +1909,33 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
     card.className = 'event-card ' + e.person;
     const cat = catMap[eventCategory(e)];
     let durationBadge = '';
+    let plannedBadge = '';
     if(e.tripId){
       const range = tripRange(e.tripId);
       const nights = Math.max(range.count-1, 0);
       durationBadge = `<span class="event-cat">🧳 共${range.count}天${nights}夜</span>`;
+      const hasAnyPlan = events.some(x=> x.tripId===e.tripId && Array.isArray(x.dayPlan) && x.dayPlan.length>0);
+      if(!hasAnyPlan) plannedBadge = `<span class="event-cat unplanned">📭 尚未規劃細節</span>`;
     }
     card.innerHTML = `
       <div class="event-time">${e.time || ''}</div>
       <div class="event-body">
         <p class="event-title">${escapeHtml(e.title)}</p>
         ${e.note ? `<p class="event-note">${escapeHtml(e.note)}</p>` : ''}
+        ${(e.place && !e.tripId) ? `<a class="itin-map-link" href="${mapSearchUrl(e.place)}" target="_blank" rel="noopener" onclick="event.stopPropagation()">📍 ${escapeHtml(e.place)}</a>` : ''}
+        ${(e.cost && !e.tripId) ? `<p class="event-note">💰 NT$${Number(e.cost).toLocaleString()}</p>` : ''}
         <div class="event-meta">
           <span class="event-tag ${e.person}">${personLabel[e.person]}</span>
           <span class="event-cat">${cat.icon} ${cat.label}</span>
           ${durationBadge}
+          ${plannedBadge}
+          ${e.tripId ? `<span class="event-cat">📋 點開看詳細行程</span>` : ''}
         </div>
       </div>
     `;
     card.addEventListener('click', ()=>{
       if(e.isPeriodEstimate){ openCycleSheet(); return; }
+      if(e.tripId){ openItinerary(e.tripId); return; }
       openForm(e);
     });
     return card;
@@ -1768,6 +2088,513 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
     return {start: days[0], end: days[days.length-1], count: days.length};
   }
 
+  // ---------- 旅遊詳細行程 ----------
+  const itineraryOverlay = $('itineraryOverlay');
+  let currentItineraryTripId = null;
+  const ITIN_TYPES = [
+    {key:'transport', icon:'🚗', label:'交通'},
+    {key:'spot', icon:'📍', label:'景點'},
+    {key:'food', icon:'🍽️', label:'餐飲'},
+    {key:'stay', icon:'🏨', label:'住宿'},
+    {key:'run', icon:'🏃', label:'路跑'},
+    {key:'show', icon:'🎭', label:'展演'},
+    {key:'other', icon:'📝', label:'其他'}
+  ];
+  // 標成這幾種類型的細項，費用統計時會獨立歸進對應分類(路跑/展演)，不會併進整趟旅遊的分類裡
+  const ITIN_TYPE_TO_STATS_CAT = {run:'run', show:'show'};
+  const itinTypeMap = Object.fromEntries(ITIN_TYPES.map(t=>[t.key,t]));
+  function itinTypeIcon(key){ return (itinTypeMap[key]||itinTypeMap.other).icon; }
+  function itinDetailPlaceholder(key){
+    if(key==='transport') return '交通方式，例如：開車20分（選填）';
+    if(key==='spot') return '停留時間，例如：1.5小時（選填）';
+    return '細節備註（選填）';
+  }
+  const TRANSPORT_MODES = [
+    {key:'drive', icon:'🚗', label:'自駕'},
+    {key:'walk', icon:'🚶', label:'步行'},
+    {key:'bus', icon:'🚌', label:'巴士'},
+    {key:'rail', icon:'🚆', label:'火車'},
+    {key:'hsr', icon:'🚄', label:'高鐵'},
+    {key:'flight', icon:'✈️', label:'飛機'},
+    {key:'ship', icon:'🛳️', label:'船'}
+  ];
+  const ROUTABLE_MODES = ['drive','walk']; // 這幾種交通方式會顯示「開啟路線規劃」連結
+  const transportModeMap = Object.fromEntries(TRANSPORT_MODES.map(t=>[t.key,t]));
+  function itemIcon(item){
+    if(item.type==='transport') return (transportModeMap[item.transportMode]||TRANSPORT_MODES[0]).icon;
+    return itinTypeIcon(item.type);
+  }
+  function mapSearchUrl(place){ return 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(place); }
+  function mapDirectionsUrl(origin, destination, mode){
+    const travelMode = mode==='walk' ? 'walking' : 'driving';
+    let url = 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(destination) + '&travelmode=' + travelMode;
+    if(origin) url += '&origin=' + encodeURIComponent(origin);
+    return url;
+  }
+
+  // ---------- 即時天氣（Open-Meteo，免金鑰） ----------
+  const WEATHER_ICONS = {
+    0:{icon:'☀️',label:'晴'}, 1:{icon:'🌤️',label:'晴時多雲'}, 2:{icon:'⛅',label:'多雲'}, 3:{icon:'☁️',label:'陰'},
+    45:{icon:'🌫️',label:'霧'}, 48:{icon:'🌫️',label:'霧'},
+    51:{icon:'🌦️',label:'毛毛雨'}, 53:{icon:'🌦️',label:'毛毛雨'}, 55:{icon:'🌦️',label:'毛毛雨'},
+    61:{icon:'🌧️',label:'雨'}, 63:{icon:'🌧️',label:'雨'}, 65:{icon:'🌧️',label:'大雨'},
+    71:{icon:'🌨️',label:'雪'}, 73:{icon:'🌨️',label:'雪'}, 75:{icon:'🌨️',label:'大雪'},
+    80:{icon:'🌦️',label:'陣雨'}, 81:{icon:'🌦️',label:'陣雨'}, 82:{icon:'⛈️',label:'強陣雨'},
+    95:{icon:'⛈️',label:'雷雨'}, 96:{icon:'⛈️',label:'雷雨'}, 99:{icon:'⛈️',label:'雷雨'}
+  };
+  function weatherIconFor(code){ return WEATHER_ICONS[code] || {icon:'', label:''}; }
+  const geocodeCache = {};
+  const weatherCache = {};
+  // 國家代碼 → 該國官方氣象單位在 Open-Meteo 裡的模型名稱。
+  // 只收錄有查證過確實存在的參數名稱；沒列出的國家(包含台灣，因為中央氣象署本來就沒有被 Open-Meteo 整合)
+  // 一律使用 best_match 自動選擇當地解析度最高的模型，這已經是能拿到的最佳選項。
+  const COUNTRY_MODELS = {
+    'JP': 'jma_seamless',       // 日本氣象廳
+    'US': 'gfs_seamless',       // 美國 NOAA
+    'DE': 'dwd_icon_seamless',  // 德國氣象局
+    'FR': 'meteofrance_seamless', // 法國氣象局
+    'CA': 'gem_seamless'        // 加拿大氣象局
+  };
+  async function geocodePlace(place){
+    if(place in geocodeCache) return geocodeCache[place];
+    try{
+      const res = await fetch('https://geocoding-api.open-meteo.com/v1/search?name=' + encodeURIComponent(place) + '&count=1&language=zh');
+      const data = await res.json();
+      const r = data.results && data.results[0];
+      const loc = r ? {lat:r.latitude, lon:r.longitude, countryCode:r.country_code||''} : null;
+      geocodeCache[place] = loc;
+      return loc;
+    }catch(e){ geocodeCache[place] = null; return null; }
+  }
+  async function requestWeather(loc, dateStr, modelParam){
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${loc.lat}&longitude=${loc.lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTaipei${modelParam}&start_date=${dateStr}&end_date=${dateStr}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const codeArr = data.daily && (data.daily.weather_code || data.daily.weathercode);
+    if(data.daily && Array.isArray(data.daily.time) && data.daily.time.length && Array.isArray(codeArr) && codeArr[0]!=null){
+      return {code:codeArr[0], max:data.daily.temperature_2m_max[0], min:data.daily.temperature_2m_min[0]};
+    }
+    return null;
+  }
+  // 已經發生過的日期，改查歷史實際天氣紀錄(不是預報)；ERA5 最近幾天可能還沒更新完成，查不到屬正常現象
+  async function requestHistoricalWeather(loc, dateStr){
+    const url = `https://archive-api.open-meteo.com/v1/archive?latitude=${loc.lat}&longitude=${loc.lon}&daily=weather_code,temperature_2m_max,temperature_2m_min&timezone=Asia%2FTaipei&start_date=${dateStr}&end_date=${dateStr}`;
+    const res = await fetch(url);
+    const data = await res.json();
+    const codeArr = data.daily && (data.daily.weather_code || data.daily.weathercode);
+    if(data.daily && Array.isArray(data.daily.time) && data.daily.time.length && Array.isArray(codeArr) && codeArr[0]!=null){
+      return {code:codeArr[0], max:data.daily.temperature_2m_max[0], min:data.daily.temperature_2m_min[0], isHistorical:true};
+    }
+    return null;
+  }
+  async function fetchDayWeather(place, dateStr){
+    const cacheKey = place + '|' + dateStr;
+    if(cacheKey in weatherCache) return weatherCache[cacheKey];
+    const loc = await geocodePlace(place);
+    if(!loc){ weatherCache[cacheKey] = null; return null; }
+    try{
+      if(dateStr < dateKey(today)){
+        const hist = await requestHistoricalWeather(loc, dateStr);
+        weatherCache[cacheKey] = hist;
+        return hist;
+      }
+      // 查得到該國官方氣象單位的模型時優先使用；該模型查不到(例如超出它自己的預報範圍)
+      // 或本來就沒有對應國家時，一律安全退回 best_match 混合模型，不會整個查不到
+      const nationalModel = COUNTRY_MODELS[loc.countryCode];
+      if(nationalModel){
+        const result = await requestWeather(loc, dateStr, '&models='+nationalModel);
+        if(result){ weatherCache[cacheKey] = result; return result; }
+      }
+      const fallback = await requestWeather(loc, dateStr, '');
+      weatherCache[cacheKey] = fallback;
+      return fallback;
+    }catch(e){ weatherCache[cacheKey] = null; return null; }
+  }
+
+  function openItinerary(tripId){
+    currentItineraryTripId = tripId;
+    renderItinerary();
+    itineraryOverlay.classList.add('show');
+  }
+  function closeItinerary(){ itineraryOverlay.classList.remove('show'); }
+
+  // ---------- 行前檢查清單（存在旅遊第一天的資料上，整趟旅遊共用一份） ----------
+  let currentChecklistDayEv = null;
+  function renderTripChecklist(firstDayEv){
+    currentChecklistDayEv = firstDayEv;
+    const list = Array.isArray(firstDayEv.tripChecklist) ? firstDayEv.tripChecklist : [];
+    $('itinChecklistCount').textContent = list.length ? `${list.filter(x=>!x.done).length} 件未完成` : '';
+    const wrap = $('itinChecklistList');
+    wrap.innerHTML = '';
+    if(list.length===0){
+      wrap.innerHTML = '<div class="search-empty">還沒有檢查項目</div>';
+      return;
+    }
+    [...list].sort((a,b)=> (a.done?1:0)-(b.done?1:0)).forEach(item=>{
+      const row = document.createElement('div');
+      row.className = 'todo-item';
+      const check = document.createElement('div');
+      check.className = 'todo-check' + (item.done?' done':'');
+      check.textContent = item.done ? '✓' : '';
+      check.addEventListener('click', async ()=>{
+        item.done = !item.done;
+        await saveEvents();
+        renderTripChecklist(currentChecklistDayEv);
+      });
+      const text = document.createElement('span');
+      text.className = 'todo-text' + (item.done?' done':'');
+      text.textContent = item.text;
+      const del = document.createElement('span');
+      del.className = 'todo-del';
+      del.textContent = '刪除';
+      del.addEventListener('click', async ()=>{
+        currentChecklistDayEv.tripChecklist = (currentChecklistDayEv.tripChecklist||[]).filter(x=>x.id!==item.id);
+        await saveEvents();
+        renderTripChecklist(currentChecklistDayEv);
+      });
+      row.appendChild(check);
+      row.appendChild(text);
+      row.appendChild(del);
+      wrap.appendChild(row);
+    });
+  }
+  async function addTripChecklistItem(){
+    const input = $('itinChecklistInput');
+    const text = input.value.trim();
+    if(!text || !currentChecklistDayEv) return;
+    currentChecklistDayEv.tripChecklist = Array.isArray(currentChecklistDayEv.tripChecklist) ? currentChecklistDayEv.tripChecklist : [];
+    currentChecklistDayEv.tripChecklist.push({id:'chk-'+Date.now()+'-'+Math.random().toString(36).slice(2,6), text, done:false});
+    input.value = '';
+    await saveEvents();
+    renderTripChecklist(currentChecklistDayEv);
+  }
+  $('itinChecklistAddBtn').addEventListener('click', addTripChecklistItem);
+  $('itinChecklistInput').addEventListener('keydown', (e)=>{ if(e.key==='Enter') addTripChecklistItem(); });
+
+  function renderItinerary(){
+    const dayEvents = events.filter(e=>e.tripId===currentItineraryTripId).sort((a,b)=> a.date.localeCompare(b.date));
+    if(dayEvents.length===0){ closeItinerary(); return; }
+    const range = tripRange(currentItineraryTripId);
+    const nights = Math.max(range.count-1, 0);
+    $('itineraryTitle').textContent = dayEvents[0].title;
+    const startD = new Date(range.start+'T00:00:00');
+    const endD = new Date(range.end+'T00:00:00');
+    let totalCost = 0;
+    dayEvents.forEach(ev=> (Array.isArray(ev.dayPlan)?ev.dayPlan:[]).forEach(item=>{
+      if(item.cost) totalCost += Number(item.cost);
+    }));
+    $('itinerarySubtitle').textContent = `${startD.getMonth()+1}/${startD.getDate()} ～ ${endD.getMonth()+1}/${endD.getDate()}・共${range.count}天${nights}夜` + (totalCost>0 ? `・已記錄花費 NT$${totalCost.toLocaleString()}` : '');
+    $('itineraryCostBreakdown').style.display = 'none';
+
+    renderTripChecklist(dayEvents[0]);
+
+    const wrap = $('itineraryDays');
+    wrap.innerHTML = '';
+    dayEvents.forEach((dayEv, i)=>{
+      const d = new Date(dayEv.date+'T00:00:00');
+      const section = document.createElement('div');
+      section.className = 'itin-day';
+      const head = document.createElement('div');
+      head.className = 'itin-day-head';
+      const weatherUrl = 'https://www.google.com/search?q=' + encodeURIComponent(dayEvents[0].title + ' 天氣 ' + (d.getMonth()+1) + '/' + d.getDate());
+      const weatherSlotId = 'weatherSlot-' + dayEv.id;
+      // 找出這天是否還有「不屬於這趟旅遊」的其他行程(例如剛好卡在旅遊期間的路跑、展演)，提示並可點擊跳過去看
+      const md = dayEv.date.slice(5);
+      const y = parseInt(dayEv.date.slice(0,4),10);
+      const crossEvents = events.filter(e=>{
+        if(e.tripId) return false; // 排除任何屬於旅遊的行程(包含這趟自己跟其他趟)，只提示單日/重複行程
+        if(e.repeat==='yearly') return monthDayOf(e)===md && y>=baseYearOf(e);
+        return e.date === dayEv.date;
+      });
+      const crossHint = crossEvents.length
+        ? ` <a class="itin-cross-ref" data-date="${dayEv.date}">📌 這天還有：${escapeHtml(crossEvents.map(e=>e.title).join('、'))}</a>` : '';
+      head.innerHTML = `Day ${i+1}・${d.getMonth()+1}/${d.getDate()}（${weekNames[d.getDay()]}） <span class="itin-weather-slot" id="${weatherSlotId}">⋯</span>${crossHint}`;
+      section.appendChild(head);
+      const crossLink = head.querySelector('.itin-cross-ref');
+      if(crossLink){
+        crossLink.addEventListener('click', ()=>{
+          closeItinerary();
+          selected = new Date(dayEv.date+'T00:00:00');
+          viewYear = selected.getFullYear(); viewMonth = selected.getMonth();
+          weekStart = getWeekStart(selected);
+          viewMode = 'month';
+          document.querySelectorAll('#viewToggle button').forEach(b=> b.classList.toggle('active', b.dataset.v==='month'));
+          renderAll();
+        });
+      }
+
+      fetchDayWeather(dayEvents[0].title, dayEv.date).then(w=>{
+        const slot = $(weatherSlotId);
+        if(!slot) return; // 畫面可能已經因為其他操作重新渲染過，找不到就略過
+        if(w && w.code!==undefined){
+          const wi = weatherIconFor(w.code);
+          slot.innerHTML = `${wi.icon} ${wi.label} ${Math.round(w.min)}°～${Math.round(w.max)}°（${w.isHistorical?'實際':'預估'}・${escapeHtml(dayEvents[0].title)}）`;
+        } else {
+          slot.innerHTML = `<a class="itin-day-weather" href="${weatherUrl}" target="_blank" rel="noopener">☀️ 查看天氣</a>`;
+        }
+      });
+
+      const items = Array.isArray(dayEv.dayPlan) ? [...dayEv.dayPlan].sort((a,b)=> (a.time||'99:99').localeCompare(b.time||'99:99')) : [];
+      items.forEach(item=>{
+        const row = document.createElement('div');
+        row.className = 'itin-item';
+        const transitLine = (item.type==='transport' && !ROUTABLE_MODES.includes(item.transportMode) && (item.transportNo||item.fromStation||item.toStation))
+          ? `<div class="itin-detail">🎫 ${[item.transportNo, [item.fromStation, item.toStation].filter(Boolean).join(' → ')].filter(Boolean).join('｜')}</div>` : '';
+        let mapLine = '';
+        if(item.type==='transport' && ROUTABLE_MODES.includes(item.transportMode) && item.place){
+          const originText = item.origin ? `${item.origin} → ` : '';
+          mapLine = `<a class="itin-map-link" href="${mapDirectionsUrl(item.origin, item.place, item.transportMode)}" target="_blank" rel="noopener">🗺️ ${originText}${escapeHtml(item.place)}（路線規劃）</a>`;
+        } else if(item.type!=='transport' && item.place){
+          mapLine = `<a class="itin-map-link" href="${mapSearchUrl(item.place)}" target="_blank" rel="noopener">📍 ${escapeHtml(item.place)}</a>`;
+        }
+        const costLine = item.cost ? `<div class="itin-detail">💰 NT$${Number(item.cost).toLocaleString()}</div>` : '';
+        row.innerHTML = `
+          <span class="itin-type-icon">${itemIcon(item)}</span>
+          <span class="itin-time">${item.time||''}</span>
+          <div class="itin-body">
+            <div class="itin-text">${escapeHtml(item.text)}</div>
+            ${item.detail ? `<div class="itin-detail">${escapeHtml(item.detail)}</div>` : ''}
+            ${transitLine}
+            ${costLine}
+            ${mapLine}
+          </div>
+          <span class="itin-item-actions">
+            <span class="itin-edit">編輯</span>
+            <span class="itin-del">刪除</span>
+          </span>`;
+        row.querySelector('.itin-del').addEventListener('click', async ()=>{
+          dayEv.dayPlan = (dayEv.dayPlan||[]).filter(x=>x.id!==item.id);
+          await saveEvents();
+          renderItinerary();
+        });
+        row.querySelector('.itin-edit').addEventListener('click', ()=> startEditItem(item));
+        section.appendChild(row);
+      });
+
+      // 類型選擇器（一排5個小圖示，預設選「其他」）
+      let selectedType = 'other';
+      let selectedTransportMode = 'drive';
+      let editingItemId = null;
+      const typePicker = document.createElement('div');
+      typePicker.className = 'itin-type-picker';
+      ITIN_TYPES.forEach(t=>{
+        const opt = document.createElement('div');
+        opt.className = 'itin-type-opt' + (t.key===selectedType ? ' active' : '');
+        opt.textContent = t.icon + ' ' + t.label;
+        opt.addEventListener('click', ()=>{
+          selectedType = t.key;
+          typePicker.querySelectorAll('.itin-type-opt').forEach((el,idx)=> el.classList.toggle('active', ITIN_TYPES[idx].key===selectedType));
+          detailInput.placeholder = itinDetailPlaceholder(selectedType);
+          refreshExtraFields();
+        });
+        typePicker.appendChild(opt);
+      });
+      section.appendChild(typePicker);
+
+      // 交通子類型選擇器（只有選「交通」才顯示）
+      const modePicker = document.createElement('div');
+      modePicker.className = 'itin-type-picker';
+      modePicker.style.display = 'none';
+      TRANSPORT_MODES.forEach(m=>{
+        const opt = document.createElement('div');
+        opt.className = 'itin-type-opt' + (m.key===selectedTransportMode ? ' active' : '');
+        opt.textContent = m.icon + ' ' + m.label;
+        opt.addEventListener('click', ()=>{
+          selectedTransportMode = m.key;
+          modePicker.querySelectorAll('.itin-type-opt').forEach((el,idx)=> el.classList.toggle('active', TRANSPORT_MODES[idx].key===selectedTransportMode));
+          refreshExtraFields();
+        });
+        modePicker.appendChild(opt);
+      });
+      section.appendChild(modePicker);
+
+      // 自駕：起點(選填)／目的地
+      const driveFields = document.createElement('div');
+      driveFields.className = 'itin-add-row';
+      driveFields.style.display = 'none';
+      const originInput = document.createElement('input');
+      originInput.type = 'text';
+      originInput.className = 'itin-text-input';
+      originInput.placeholder = '起點（留空＝目前位置）';
+      const destInput = document.createElement('input');
+      destInput.type = 'text';
+      destInput.className = 'itin-text-input';
+      destInput.placeholder = '目的地';
+      driveFields.appendChild(originInput);
+      driveFields.appendChild(destInput);
+      section.appendChild(driveFields);
+
+      // 大眾運輸：班次／起點站／迄點站
+      const transitFields = document.createElement('div');
+      transitFields.className = 'itin-add-row';
+      transitFields.style.display = 'none';
+      const transportNoInput = document.createElement('input');
+      transportNoInput.type = 'text';
+      transportNoInput.className = 'itin-text-input';
+      transportNoInput.placeholder = '班次（選填）';
+      const fromStationInput = document.createElement('input');
+      fromStationInput.type = 'text';
+      fromStationInput.className = 'itin-text-input';
+      fromStationInput.placeholder = '起點站（選填）';
+      const toStationInput = document.createElement('input');
+      toStationInput.type = 'text';
+      toStationInput.className = 'itin-text-input';
+      toStationInput.placeholder = '迄點站（選填）';
+      transitFields.appendChild(transportNoInput);
+      transitFields.appendChild(fromStationInput);
+      transitFields.appendChild(toStationInput);
+      section.appendChild(transitFields);
+
+      // 景點／餐飲／住宿／其他：地點名稱
+      const placeField = document.createElement('div');
+      placeField.className = 'itin-add-row';
+      placeField.style.display = 'none';
+      const placeInput = document.createElement('input');
+      placeInput.type = 'text';
+      placeInput.className = 'itin-text-input';
+      placeInput.placeholder = '地點名稱（選填，會產生地圖連結）';
+      placeField.appendChild(placeInput);
+      section.appendChild(placeField);
+
+      function refreshExtraFields(){
+        modePicker.style.display = selectedType==='transport' ? 'flex' : 'none';
+        driveFields.style.display = (selectedType==='transport' && ROUTABLE_MODES.includes(selectedTransportMode)) ? 'flex' : 'none';
+        transitFields.style.display = (selectedType==='transport' && !ROUTABLE_MODES.includes(selectedTransportMode)) ? 'flex' : 'none';
+        placeField.style.display = (selectedType!=='transport') ? 'flex' : 'none';
+      }
+      refreshExtraFields();
+
+      const editingBadge = document.createElement('div');
+      editingBadge.className = 'itin-editing-badge';
+      editingBadge.style.display = 'none';
+      editingBadge.innerHTML = `正在編輯項目 <span class="itin-cancel-edit">取消編輯</span>`;
+      section.appendChild(editingBadge);
+
+      const addRow = document.createElement('div');
+      addRow.className = 'itin-add-row';
+      const timeInput = document.createElement('input');
+      timeInput.type = 'time';
+      timeInput.className = 'itin-time-input';
+      const textInput = document.createElement('input');
+      textInput.type = 'text';
+      textInput.className = 'itin-text-input';
+      textInput.placeholder = '新增這天的行程項目⋯';
+      const addBtn = document.createElement('button');
+      addBtn.className = 'itin-add-btn';
+      addBtn.textContent = '+';
+      const detailRow = document.createElement('div');
+      detailRow.className = 'itin-add-row';
+      const detailInput = document.createElement('input');
+      detailInput.type = 'text';
+      detailInput.className = 'itin-detail-input';
+      detailInput.placeholder = itinDetailPlaceholder(selectedType);
+      const costInput = document.createElement('input');
+      costInput.type = 'number';
+      costInput.inputMode = 'numeric';
+      costInput.className = 'itin-detail-input itin-cost-input';
+      costInput.placeholder = '費用 NT$（選填）';
+
+      function resetForm(){
+        editingItemId = null;
+        editingBadge.style.display = 'none';
+        addBtn.textContent = '+';
+        timeInput.value = ''; textInput.value = ''; detailInput.value = ''; costInput.value = '';
+        originInput.value = ''; destInput.value = ''; transportNoInput.value = ''; fromStationInput.value = ''; toStationInput.value = ''; placeInput.value = '';
+        selectedType = 'other'; selectedTransportMode = 'drive';
+        typePicker.querySelectorAll('.itin-type-opt').forEach((el,idx)=> el.classList.toggle('active', ITIN_TYPES[idx].key==='other'));
+        modePicker.querySelectorAll('.itin-type-opt').forEach((el,idx)=> el.classList.toggle('active', TRANSPORT_MODES[idx].key==='drive'));
+        detailInput.placeholder = itinDetailPlaceholder(selectedType);
+        refreshExtraFields();
+      }
+      editingBadge.querySelector('.itin-cancel-edit').addEventListener('click', resetForm);
+
+      function startEditItem(item){
+        editingItemId = item.id;
+        editingBadge.style.display = 'block';
+        addBtn.textContent = '✓';
+        timeInput.value = item.time || '';
+        textInput.value = item.text || '';
+        detailInput.value = item.detail || '';
+        costInput.value = item.cost || '';
+        selectedType = item.type || 'other';
+        typePicker.querySelectorAll('.itin-type-opt').forEach((el,idx)=> el.classList.toggle('active', ITIN_TYPES[idx].key===selectedType));
+        if(selectedType==='transport'){
+          selectedTransportMode = item.transportMode || 'drive';
+          modePicker.querySelectorAll('.itin-type-opt').forEach((el,idx)=> el.classList.toggle('active', TRANSPORT_MODES[idx].key===selectedTransportMode));
+          if(ROUTABLE_MODES.includes(selectedTransportMode)){
+            originInput.value = item.origin || '';
+            destInput.value = item.place || '';
+          } else {
+            transportNoInput.value = item.transportNo || '';
+            fromStationInput.value = item.fromStation || '';
+            toStationInput.value = item.toStation || '';
+          }
+        } else {
+          placeInput.value = item.place || '';
+        }
+        detailInput.placeholder = itinDetailPlaceholder(selectedType);
+        refreshExtraFields();
+        editingBadge.scrollIntoView({block:'center', behavior:'smooth'});
+      }
+
+      const addFn = async ()=>{
+        const text = textInput.value.trim();
+        if(!text) return;
+        dayEv.dayPlan = Array.isArray(dayEv.dayPlan) ? dayEv.dayPlan : [];
+        const itemData = {
+          id: editingItemId || ('plan-'+Date.now()+'-'+Math.random().toString(36).slice(2,6)),
+          time:timeInput.value||'', type:selectedType, text, detail:detailInput.value.trim()
+        };
+        if(costInput.value !== ''){
+          const costVal = Number(costInput.value);
+          if(!isNaN(costVal)) itemData.cost = costVal;
+        }
+        if(selectedType==='transport'){
+          itemData.transportMode = selectedTransportMode;
+          if(ROUTABLE_MODES.includes(selectedTransportMode)){
+            if(originInput.value.trim()) itemData.origin = originInput.value.trim();
+            if(destInput.value.trim()) itemData.place = destInput.value.trim();
+          } else {
+            if(transportNoInput.value.trim()) itemData.transportNo = transportNoInput.value.trim();
+            if(fromStationInput.value.trim()) itemData.fromStation = fromStationInput.value.trim();
+            if(toStationInput.value.trim()) itemData.toStation = toStationInput.value.trim();
+          }
+        } else if(placeInput.value.trim()){
+          itemData.place = placeInput.value.trim();
+        }
+        if(editingItemId){
+          const idx = dayEv.dayPlan.findIndex(x=>x.id===editingItemId);
+          if(idx>-1) dayEv.dayPlan[idx] = itemData; else dayEv.dayPlan.push(itemData);
+        } else {
+          dayEv.dayPlan.push(itemData);
+        }
+        await saveEvents();
+        renderItinerary();
+      };
+      addBtn.addEventListener('click', addFn);
+      textInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') addFn(); });
+      detailInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') addFn(); });
+      costInput.addEventListener('keydown', (e)=>{ if(e.key==='Enter') addFn(); });
+      addRow.appendChild(timeInput);
+      addRow.appendChild(textInput);
+      addRow.appendChild(addBtn);
+      section.appendChild(addRow);
+      detailRow.appendChild(detailInput);
+      detailRow.appendChild(costInput);
+      section.appendChild(detailRow);
+
+      wrap.appendChild(section);
+    });
+  }
+
+  $('itineraryEditTripBtn').addEventListener('click', ()=>{
+    const dayEv = events.find(e=>e.tripId===currentItineraryTripId);
+    closeItinerary();
+    if(dayEv) openForm(dayEv);
+  });
+  $('itineraryCloseBtn').addEventListener('click', closeItinerary);
+  // 刻意不加「點背景關閉」：新增細項時容易誤觸背景，避免打到一半的內容不小心消失
+
   let editingOccurrenceYear = null;
   function openForm(evt){
     editingTripId = evt && evt.tripId ? evt.tripId : null;
@@ -1791,6 +2618,8 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
       $('formHint').style.display = 'block';
       $('timeFieldWrap').style.display = 'none';
       $('repeatField').style.display = 'none';
+      $('placeField').style.display = 'none';
+      $('costField').style.display = 'none';
       $('fTime').value = '';
       $('fRepeat').checked = false;
     } else {
@@ -1803,6 +2632,10 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
       $('formHint').style.display = evt ? 'none' : 'block';
       $('timeFieldWrap').style.display = 'block';
       $('repeatField').style.display = 'block';
+      $('placeField').style.display = 'block';
+      $('fPlace').value = rawEvt ? (rawEvt.place||'') : '';
+      $('costField').style.display = 'block';
+      $('fCost').value = rawEvt && rawEvt.cost ? rawEvt.cost : '';
       $('fRepeat').checked = !!(evt && evt.repeat==='yearly');
     }
 
@@ -1943,6 +2776,11 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
         repeat: $('fRepeat').checked ? 'yearly' : 'none',
         editedBy, editedAt: nowIso
       };
+      if($('fPlace').value.trim()) payload.place = $('fPlace').value.trim();
+      if($('fCost').value !== ''){
+        const costVal = Number($('fCost').value);
+        if(!isNaN(costVal)) payload.cost = costVal;
+      }
       if(editingId){
         const idx = events.findIndex(e=>e.id===editingId);
         // 單年度專屬備註：保留原本的 yearNotes，只更新目前正在編輯的那一年
@@ -1995,7 +2833,15 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
   $('fabBtn').addEventListener('click', ()=> openForm(null));
 
   const idOverlay = $('idOverlay');
-  $('idBtn').addEventListener('click', ()=> idOverlay.classList.add('show'));
+  $('idBtn').addEventListener('click', ()=>{
+    $('homeLocationInput').value = homeLocation || '';
+    idOverlay.classList.add('show');
+  });
+  $('homeLocationInput').addEventListener('change', async ()=>{
+    homeLocation = $('homeLocationInput').value.trim();
+    await saveHomeLocation();
+    renderDayList();
+  });
   $('idSkip').addEventListener('click', ()=> idOverlay.classList.remove('show'));
   idOverlay.addEventListener('click', (e)=>{ if(e.target===idOverlay) idOverlay.classList.remove('show'); });
   document.querySelectorAll('.identity-card').forEach(card=>{
@@ -2068,7 +2914,20 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
       }
       matches.push(ev);
     });
-    if(matches.length===0){ wrap.innerHTML = '<div class="search-empty">找不到符合的行程</div>'; return; }
+    // 也搜尋旅遊裡面的每一項細項(地點/內容/備註)，例如搜「丹丹漢堡」能直接找到藏在某趟旅遊細節裡的那一項
+    const itinMatches = [];
+    events.forEach(ev=>{
+      if(!ev.tripId || !Array.isArray(ev.dayPlan)) return;
+      ev.dayPlan.forEach(item=>{
+        const haystack = [item.text, item.place, item.detail, item.transportNo, item.fromStation, item.toStation].filter(Boolean).join(' ');
+        if(haystack.includes(q)){
+          itinMatches.push({tripId:ev.tripId, tripTitle:ev.title, date:ev.date, item});
+        }
+      });
+    });
+    itinMatches.sort((a,b)=> a.date.localeCompare(b.date));
+
+    if(matches.length===0 && itinMatches.length===0){ wrap.innerHTML = '<div class="search-empty">找不到符合的行程</div>'; return; }
     wrap.innerHTML = '';
     matches.slice(0,50).forEach(ev=>{
       const item = document.createElement('div');
@@ -2093,6 +2952,19 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
         viewMode = 'month';
         document.querySelectorAll('#viewToggle button').forEach(b=> b.classList.toggle('active', b.dataset.v==='month'));
         renderAll();
+      });
+      wrap.appendChild(item);
+    });
+    itinMatches.slice(0,20).forEach(m=>{
+      const item = document.createElement('div');
+      item.className = 'search-result';
+      const d = new Date(m.date+'T00:00:00');
+      item.innerHTML = `<div class="sr-date">${d.getMonth()+1}/${d.getDate()}（${weekNames[d.getDay()]}）・${escapeHtml(m.tripTitle)}的行程細項</div>
+        <div class="sr-title">${itemIcon(m.item)} ${escapeHtml(m.item.text)}</div>
+        ${m.item.detail ? `<div class="sr-note">${escapeHtml(m.item.detail)}</div>` : ''}`;
+      item.addEventListener('click', ()=>{
+        searchOverlay.classList.remove('show');
+        openItinerary(m.tripId);
       });
       wrap.appendChild(item);
     });
@@ -2124,8 +2996,104 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
     return list;
   }
 
+  function renderCostStats(year){
+    const wrap = $('costStatsSummary');
+    wrap.innerHTML = '';
+    const occs = getYearOccurrences(year);
+    const categoryBuckets = {}; // catKey -> {total, entries:[]}
+    function addEntry(catKey, entry){
+      if(!categoryBuckets[catKey]) categoryBuckets[catKey] = {total:0, entries:[]};
+      categoryBuckets[catKey].total += entry.amount;
+      categoryBuckets[catKey].entries.push(entry);
+    }
+    occs.forEach(e=>{
+      const catKey = eventCategory(e);
+      if(e.tripId){
+        // 旅遊：不是整趟一起算，而是拆開來看每一項細項自己標的類型——
+        // 標成路跑／展演的細項，獨立歸進對應分類；其他(交通/景點/餐飲/住宿/其他)才歸進這趟旅遊本身的分類
+        const dayEvs = events.filter(x=>x.tripId===e.tripId).sort((a,b)=> a.date.localeCompare(b.date));
+        const sD = new Date(dayEvs[0].date+'T00:00:00');
+        const eD = new Date(dayEvs[dayEvs.length-1].date+'T00:00:00');
+        const subLabel = `${sD.getMonth()+1}/${sD.getDate()} ～ ${eD.getMonth()+1}/${eD.getDate()}`;
+        let tripBaseTotal = 0;
+        const extraByType = {};
+        dayEvs.forEach(ev=> (Array.isArray(ev.dayPlan)?ev.dayPlan:[]).forEach(item=>{
+          if(!item.cost) return;
+          const amt = Number(item.cost);
+          const statsCat = ITIN_TYPE_TO_STATS_CAT[item.type];
+          if(statsCat){
+            extraByType[statsCat] = (extraByType[statsCat]||0) + amt;
+          } else {
+            tripBaseTotal += amt;
+          }
+        }));
+        if(tripBaseTotal>0){
+          addEntry(catKey, {type:'trip', tripId:e.tripId, title:dayEvs[0].title, amount:tripBaseTotal, sub:subLabel});
+        }
+        Object.keys(extraByType).forEach(statsCat=>{
+          const typeLabel = (CATS.find(c=>c.key===statsCat)||{}).label || statsCat;
+          addEntry(statsCat, {type:'trip', tripId:e.tripId, title:`${dayEvs[0].title}（${typeLabel}）`, amount:extraByType[statsCat], sub:subLabel});
+        });
+      } else {
+        // 單日行程：直接用自己表單裡填的費用欄位
+        if(!e.cost) return;
+        const d = new Date(e.occDate+'T00:00:00');
+        addEntry(catKey, {type:'event', id:e.id, title:e.title, amount:Number(e.cost), sub:`${d.getMonth()+1}/${d.getDate()}（${weekNames[d.getDay()]}）`});
+      }
+    });
+
+    const catKeys = Object.keys(categoryBuckets);
+    if(catKeys.length===0){
+      wrap.innerHTML = `<div class="empty-state" style="padding:24px 10px;"><span class="emoji">💰</span>這一年還沒有記錄任何花費</div>`;
+      return;
+    }
+    const grandTotal = catKeys.reduce((s,k)=> s+categoryBuckets[k].total, 0);
+    const totalCard = document.createElement('div');
+    totalCard.className = 'travel-cost-total';
+    totalCard.innerHTML = `<div class="tc-amount">NT$${grandTotal.toLocaleString()}</div><div class="tc-breakdown">今年總花費</div>`;
+    wrap.appendChild(totalCard);
+
+    // 依既有的分類順序顯示，只顯示有花費紀錄的分類
+    CATS.forEach(c=>{
+      const bucket = categoryBuckets[c.key];
+      if(!bucket || bucket.total<=0) return;
+      const row = document.createElement('div');
+      row.className = 'stats-row';
+      const head = document.createElement('div');
+      head.className = 'stats-row-head';
+      head.innerHTML = `<span>${c.icon} ${c.label}</span><span class="stats-count">NT$${bucket.total.toLocaleString()}</span>`;
+      const detail = document.createElement('div');
+      detail.className = 'stats-detail';
+      detail.style.display = 'none';
+      bucket.entries.sort((a,b)=> b.amount-a.amount).forEach(entry=>{
+        const line = document.createElement('div');
+        line.className = 'stats-item';
+        line.style.display = 'flex';
+        line.style.justifyContent = 'space-between';
+        line.style.alignItems = 'center';
+        if(entry.type==='trip') line.style.cursor = 'pointer';
+        line.innerHTML = `<span>${escapeHtml(entry.title)}<br><span style="font-size:11px;">${entry.sub}</span></span><span style="font-weight:700; color:var(--brand); flex:none; padding-left:10px;">NT$${entry.amount.toLocaleString()}</span>`;
+        if(entry.type==='trip'){
+          line.addEventListener('click', (clickEv)=>{
+            clickEv.stopPropagation();
+            statsOverlay.classList.remove('show');
+            openItinerary(entry.tripId);
+          });
+        }
+        detail.appendChild(line);
+      });
+      head.addEventListener('click', ()=>{
+        detail.style.display = detail.style.display==='none' ? 'block' : 'none';
+      });
+      row.appendChild(head);
+      row.appendChild(detail);
+      wrap.appendChild(row);
+    });
+  }
+
   function renderStats(){
     $('statsYearTitle').textContent = `${statsYear}年 分類統計`;
+    renderCostStats(statsYear);
     const list = getYearOccurrences(statsYear);
     const wrap = $('statsList');
     wrap.innerHTML = '';
@@ -2281,9 +3249,9 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
   const seedSingles = [
     {idBase:'checkup-2026', title:'健康檢查', date:'2026-08-11', time:'08:30', category:'medical'},
     {idBase:'shishi-yejifest-2026', title:'十鼓藝術季-2026魔法夜祭2 神之島', date:'2026-08-22', time:'19:30', note:'十鼓文創園區 夢糖劇場・共2張', category:'show'},
-    {idBase:'xinwu-marathon-2026', title:'新屋魚米之鄉馬拉松 21k', date:'2026-10-04', category:'run'},
-    {idBase:'kobe-marathon-2026', title:'神戶馬拉松 42k', date:'2026-11-15', category:'run'},
-    {idBase:'hsinchu-marathon-2026', title:'新竹城市馬拉松 21k', date:'2026-12-06', category:'run'},
+    {idBase:'xinwu-marathon-2026', title:'新屋魚米之鄉馬拉松 21k', date:'2026-10-04', category:'run', place:'新屋區, 桃園市'},
+    {idBase:'kobe-marathon-2026', title:'神戶馬拉松 42k', date:'2026-11-15', category:'run', place:'神戶市'},
+    {idBase:'hsinchu-marathon-2026', title:'新竹城市馬拉松 21k', date:'2026-12-06', category:'run', place:'新竹市'},
     {idBase:'spirited-away-stage-2026', title:'《神隱少女》舞台劇', date:'2026-12-19', time:'14:30', note:'國家戲劇院・共2張', category:'show'}
   ];
   const seedRecurring = [
@@ -2325,7 +3293,9 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
     seedSingles.forEach(s=>{
       const id = 'seed-'+s.idBase;
       if(!events.some(e=>e.id===id)){
-        events.push({id, title:s.title, date:s.date, time:s.time||'', note:s.note||'', person:'both', category:s.category||'life'});
+        const newEv = {id, title:s.title, date:s.date, time:s.time||'', note:s.note||'', person:'both', category:s.category||'life'};
+        if(s.place) newEv.place = s.place;
+        events.push(newEv);
         changed = true;
       }
     });
@@ -2348,6 +3318,149 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
         changed = true;
       }
     });
+
+    // 一次性升級：把台南行程原本純文字的細項，改成有分類/交通方式/地點/費用的結構化版本
+    const tainanPlans2 = {
+      '2026-08-22': [
+        {time:'09:30', type:'transport', transportMode:'drive', origin:'新竹市', place:'捷絲旅台南虎山館', text:'開車南下', detail:'中途服務區休息，預計中午抵達仁德'},
+        {time:'13:00', type:'stay', place:'捷絲旅台南虎山館', text:'抵達飯店，寄放行李', detail:'先寄放行李，尚未進房'},
+        {time:'14:00', type:'spot', place:'十鼓文創園區', text:'憑門票免費入園白天慢遊', detail:'天空步道、天堂路、魔法工廠、糖蜜罐咖啡館，停留約3小時'},
+        {time:'17:20', type:'stay', place:'捷絲旅台南虎山館', text:'飯店 Check-in', detail:'休息一小時', cost:6600},
+        {time:'18:30', type:'food', place:'十鼓文創園區', text:'再度入園，享用晚餐', detail:'園區內小攤簡單吃'},
+        {time:'19:30', type:'spot', place:'夢糖劇場', text:'《神之島》夜祭大秀', detail:'表演約1.5小時'},
+        {time:'21:00', type:'other', text:'散步回房休息', detail:''}
+      ],
+      '2026-08-23': [
+        {time:'09:00', type:'food', place:'捷絲旅台南虎山館', text:'飯店早餐', detail:'慵懶放空，不趕行程'},
+        {time:'11:30', type:'food', place:'法爾自然', text:'台南市區午餐', detail:'順道買得獎的 specialty tea'},
+        {time:'13:30', type:'spot', place:'台南市美術館2館', text:'【慕夏特展】', detail:'順道逛百年西市場'},
+        {time:'16:00', type:'spot', place:'保安車站', text:'保安火車站散策拍照', detail:'日系鐵道美感'},
+        {time:'17:30', type:'food', place:'捷食藝', text:'晚餐', detail:'Tesla 可在飯店補電，或仁德周邊'}
+      ],
+      '2026-08-24': [
+        {time:'08:30', type:'transport', transportMode:'drive', place:'奇美博物館', text:'早餐、退房，開車前往奇美', detail:'停 P4 觀景停車場'},
+        {time:'09:30', type:'other', text:'現場刷台新卡購特展門票', detail:'卡友價 $480/人', cost:960},
+        {time:'10:15', type:'other', text:'導覽服務台報到', detail:'1F 特展入口，領導覽子母機'},
+        {time:'10:30', type:'spot', place:'奇美博物館', text:'特展專人定時導覽', detail:'約1小時'},
+        {time:'11:30', type:'other', text:'中場休息', detail:'15 分鐘'},
+        {time:'11:45', type:'spot', place:'奇美博物館', text:'《消失的法老》VR 體驗', detail:'第五場，45分鐘'},
+        {time:'12:45', type:'transport', transportMode:'walk', text:'移動至停車場取車', detail:'P4 觀景停車場'},
+        {time:'13:10', type:'food', place:'丹丹漢堡 仁德店', text:'丹丹漢堡午餐', detail:''},
+        {time:'14:00', type:'transport', transportMode:'drive', place:'新竹市', text:'上仁德交流道，順暢北返', detail:''}
+      ]
+    };
+    Object.keys(tainanPlans2).forEach(dk=>{
+      const dayEv = events.find(e=>e.tripId==='seed-tainan-trip-2026' && e.date===dk);
+      if(!dayEv) return;
+      const existing = Array.isArray(dayEv.dayPlan) ? dayEv.dayPlan : [];
+      const hasOldVersion = existing.some(x=>String(x.id).startsWith('plan-tainan-') && !String(x.id).startsWith('plan-tainan2-'));
+      const isEmpty = existing.length===0;
+      const alreadyUpgraded = existing.some(x=>String(x.id).startsWith('plan-tainan2-'));
+      if((hasOldVersion || isEmpty) && !alreadyUpgraded){
+        // 只移除舊版自動產生的項目(id 開頭 plan-tainan-)，保留使用者自己另外新增的任何項目
+        const userAdded = existing.filter(x=>!String(x.id).startsWith('plan-tainan-'));
+        const upgraded = tainanPlans2[dk].map((item,i)=> Object.assign({id:'plan-tainan2-'+dk+'-'+i}, item));
+        dayEv.dayPlan = [...upgraded, ...userAdded];
+        changed = true;
+      }
+    });
+
+    // 一次性回填：幫已經存在的路跑活動補上地點資料，方便天氣查詢能查到比賽當地，而不是常用地點
+    const racePlaceFill = {
+      'seed-xinwu-marathon-2026': '新屋區, 桃園市',
+      'seed-kobe-marathon-2026': '神戶市',
+      'seed-hsinchu-marathon-2026': '新竹市'
+    };
+    Object.keys(racePlaceFill).forEach(id=>{
+      const ev = events.find(e=>e.id===id);
+      if(ev && !ev.place){
+        ev.place = racePlaceFill[id];
+        changed = true;
+      }
+    });
+
+    // 一次性合併：把獨立的神戶馬拉松卡片，併進「星宇神戶去 大阪回」旅遊當天(11/15)的詳細行程裡，
+    // 標成🏃路跑類型(費用統計時仍會獨立算進路跑分類)，並移除外面那張獨立卡片，避免同一天出現兩張重複的卡片
+    const kobeMarathon = events.find(e=>e.id==='seed-kobe-marathon-2026');
+    if(kobeMarathon){
+      const kobeTripDay = events.find(e=>e.tripId==='seed-kobe-osaka-trip-2026' && e.date===kobeMarathon.date);
+      if(kobeTripDay){
+        kobeTripDay.dayPlan = Array.isArray(kobeTripDay.dayPlan) ? kobeTripDay.dayPlan : [];
+        const alreadyMerged = kobeTripDay.dayPlan.some(item=>item.id==='plan-kobemarathon-merge');
+        if(!alreadyMerged){
+          const mergedItem = {id:'plan-kobemarathon-merge', time:kobeMarathon.time||'', type:'run', text:kobeMarathon.title, detail:''};
+          if(kobeMarathon.place) mergedItem.place = kobeMarathon.place;
+          if(kobeMarathon.cost) mergedItem.cost = kobeMarathon.cost;
+          kobeTripDay.dayPlan.push(mergedItem);
+        }
+      }
+      events = events.filter(e=>e.id!=='seed-kobe-marathon-2026');
+      changed = true;
+    }
+
+    // 通用輔助：把某個獨立單日行程，合併進某趟旅遊當天的詳細行程裡，並移除獨立卡片
+    function mergeStandaloneIntoTrip(standaloneId, tripId, itinType){
+      const standalone = events.find(e=>e.id===standaloneId);
+      if(!standalone) return false;
+      const tripDay = events.find(e=>e.tripId===tripId && e.date===standalone.date);
+      if(tripDay){
+        tripDay.dayPlan = Array.isArray(tripDay.dayPlan) ? tripDay.dayPlan : [];
+        const mergeId = 'plan-merge-'+standaloneId;
+        if(!tripDay.dayPlan.some(item=>item.id===mergeId)){
+          const mergedItem = {id:mergeId, time:standalone.time||'', type:itinType, text:standalone.title, detail:standalone.note||''};
+          if(standalone.place) mergedItem.place = standalone.place;
+          if(standalone.cost) mergedItem.cost = standalone.cost;
+          tripDay.dayPlan.push(mergedItem);
+        }
+      }
+      events = events.filter(e=>e.id!==standaloneId);
+      changed = true;
+      return true;
+    }
+
+    // 十鼓藝術季：台南旅遊 8/22 的詳細行程裡，其實已經有一筆幾乎重複的項目(《神之島》夜祭大秀)，
+    // 這裡改成「更新既有那筆」，把「共2張」的資訊補進去、統一標成🎭展演類型，而不是再多加一筆造成重複
+    const shishiEvent = events.find(e=>e.id==='seed-shishi-yejifest-2026');
+    if(shishiEvent){
+      const tainanDay1 = events.find(e=>e.tripId==='seed-tainan-trip-2026' && e.date===shishiEvent.date);
+      const existingItem = tainanDay1 && Array.isArray(tainanDay1.dayPlan)
+        ? tainanDay1.dayPlan.find(item=>item.id==='plan-tainan2-2026-08-22-5') : null;
+      if(existingItem){
+        existingItem.type = 'show';
+        if(shishiEvent.note && !(existingItem.detail||'').includes(shishiEvent.note)){
+          existingItem.detail = existingItem.detail ? existingItem.detail + '，' + shishiEvent.note : shishiEvent.note;
+        }
+        events = events.filter(e=>e.id!=='seed-shishi-yejifest-2026');
+        changed = true;
+      } else {
+        // 找不到既有項目(可能已經被你們自己編輯過)，就照一般方式合併一筆新的，避免資料憑空消失
+        mergeStandaloneIntoTrip('seed-shishi-yejifest-2026', 'seed-tainan-trip-2026', 'show');
+      }
+    }
+
+    // 新竹城市馬拉松：合併進 Westin 桃園旅遊(12/5~12/6)當天，標成🏃路跑
+    mergeStandaloneIntoTrip('seed-hsinchu-marathon-2026', 'seed-westin-taoyuan-2026', 'run');
+
+    // 《神隱少女》舞台劇：合併進 W Taipei 旅遊(12/19~12/20)當天，標成🎭展演
+    mergeStandaloneIntoTrip('seed-spirited-away-stage-2026', 'seed-w-taipei-2026', 'show');
+
+    // 行程規劃調整：桃園旅遊取消(12/6跑新竹馬拉松，不去桃園過夜了)，
+    // 但新竹馬拉松剛剛才被合併進桃園旅遊的細項裡，這裡先把它救出來還原成獨立行程，再整個刪除桃園旅遊
+    if(events.some(e=>e.tripId==='seed-westin-taoyuan-2026')){
+      const westinDay2 = events.find(e=>e.tripId==='seed-westin-taoyuan-2026' && e.date==='2026-12-06');
+      const marathonItem = westinDay2 && Array.isArray(westinDay2.dayPlan)
+        ? westinDay2.dayPlan.find(item=>item.id==='plan-merge-seed-hsinchu-marathon-2026') : null;
+      if(marathonItem && !events.some(e=>e.id==='seed-hsinchu-marathon-2026')){
+        const restored = {id:'seed-hsinchu-marathon-2026', title:marathonItem.text, date:'2026-12-06', category:'run'};
+        if(marathonItem.time) restored.time = marathonItem.time;
+        if(marathonItem.place) restored.place = marathonItem.place;
+        if(marathonItem.cost) restored.cost = marathonItem.cost;
+        events.push(restored);
+      }
+      events = events.filter(e=>e.tripId!=='seed-westin-taoyuan-2026');
+      changed = true;
+    }
+
     if(changed) await saveEvents();
   }
 
@@ -2373,31 +3486,37 @@ const sharedDocRef = doc(db, 'calendar', 'shared');
   function registerOfflineCache(){
     if(!('serviceWorker' in navigator)) return;
     const swCode = `
-      const CACHE_NAME = 'couple-calendar-shell-v1';
+      const CACHE_NAME = 'couple-calendar-shell-v2';
       self.addEventListener('install', (e)=>{
-        e.waitUntil(caches.open(CACHE_NAME).then(cache=> cache.add(self.registration.scope)));
         self.skipWaiting();
       });
-      self.addEventListener('activate', (e)=>{ self.clients.claim(); });
+      self.addEventListener('activate', (e)=>{
+        e.waitUntil(
+          caches.keys().then(names=> Promise.all(
+            names.filter(n=> n !== CACHE_NAME).map(n=> caches.delete(n))
+          ))
+        );
+        self.clients.claim();
+      });
       self.addEventListener('fetch', (e)=>{
         if(e.request.method !== 'GET') return;
+        // 優先抓最新版本；只有連不上網路時才退回快取，避免更新了卻一直看到舊畫面
         e.respondWith(
-          caches.match(e.request).then(cached=>{
-            const fetchPromise = fetch(e.request).then(res=>{
-              if(res && res.status===200){
-                caches.open(CACHE_NAME).then(cache=> cache.put(e.request, res.clone()));
-              }
-              return res;
-            }).catch(()=> cached);
-            return cached || fetchPromise;
-          })
+          fetch(e.request).then(res=>{
+            if(res && res.status===200){
+              caches.open(CACHE_NAME).then(cache=> cache.put(e.request, res.clone()));
+            }
+            return res;
+          }).catch(()=> caches.match(e.request))
         );
       });
     `;
     try{
       const blob = new Blob([swCode], {type:'application/javascript'});
       const swUrl = URL.createObjectURL(blob);
-      navigator.serviceWorker.register(swUrl, {scope:'./'}).catch(()=>{});
+      navigator.serviceWorker.register(swUrl, {scope:'./'}).then(reg=>{
+        if(reg && reg.update) reg.update();
+      }).catch(()=>{});
     }catch(e){ /* 部分瀏覽器不支援 Blob URL 註冊 Service Worker，靜默略過即可 */ }
   }
 
